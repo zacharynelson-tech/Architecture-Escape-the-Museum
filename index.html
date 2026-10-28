@@ -1,0 +1,1357 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Escape the Skyline Museum of Architecture</title>
+<meta name="description" content="A 60-minute team escape room that introduces 9th graders to architecture as a career.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Josefin+Sans:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#0e1319; --ink2:#161d26;
+  --line:#e7eaee; --line-dim:rgba(231,234,238,.3);
+  --paper:#f1f3f5; --paperink:#161c24;
+  --lead:#ffc66e; --ok:#79d6a8; --bad:#ff9a88; --muted:#a5afba;
+  --head:"Josefin Sans","Avenir Next","Century Gothic",system-ui,sans-serif;
+  --body:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0; color:var(--line); font:16px/1.55 var(--body);
+  background:radial-gradient(1300px 700px at 50% -8%,#2a3646 0%,#151c26 55%,#0d1218 100%) fixed; min-height:100vh;
+}
+h1,h2,h3{font-family:var(--head); font-weight:600; line-height:1.15; margin:0 0 .5em; letter-spacing:.01em}
+h1{font-size:clamp(2.2rem,6vw,3.8rem); font-weight:500; letter-spacing:.015em}
+h2{font-size:clamp(1.6rem,3.5vw,2.3rem)}
+h3{font-size:1.25rem}
+p{margin:0 0 .8em}
+a{color:var(--lead)}
+:focus-visible{outline:3px solid var(--lead); outline-offset:2px}
+.wrap{max-width:1120px; margin:0 auto; padding:0 18px}
+
+/* top bar */
+.top{position:sticky; top:0; z-index:10; background:rgba(12,17,23,.96); border-bottom:1.5px solid var(--line-dim)}
+.top .wrap{display:flex; flex-wrap:wrap; gap:8px 22px; align-items:center; justify-content:space-between; padding-top:10px; padding-bottom:10px}
+.brand{font-family:var(--head); font-weight:700; font-size:1.05rem}
+.stats{display:flex; gap:18px; align-items:center; flex-wrap:wrap; font-size:.95rem; color:var(--muted)}
+.stats b{color:var(--line); font-weight:600}
+#timer{font-family:var(--head); font-size:1.3rem; color:var(--lead); font-variant-numeric:tabular-nums}
+#timer.late{color:var(--bad)}
+.late-banner{background:var(--bad); color:#3a0b04; text-align:center; font-weight:600; padding:6px 12px}
+
+/* layout */
+.layout{display:grid; grid-template-columns:150px 1fr; gap:28px; padding-top:26px; padding-bottom:50px; align-items:start}
+@media(max-width:820px){.layout{grid-template-columns:1fr}}
+
+/* building section nav */
+.section-nav{position:sticky; top:74px; display:flex; flex-direction:column; border:1.5px solid var(--line); background:rgba(16,22,30,.85)}
+.section-nav .roof{height:22px; border-bottom:1.5px solid var(--line); background:repeating-linear-gradient(135deg,transparent 0 6px,var(--line-dim) 6px 7px)}
+.fl{padding:10px 10px 10px 12px; border-bottom:1.5px dashed var(--line-dim); font-size:.82rem; line-height:1.25; color:var(--muted); display:flex; gap:8px; align-items:center}
+.fl:last-child{border-bottom:0}
+.fl .n{font-family:var(--head); font-weight:700; font-size:1.4rem; width:1.1em; text-align:center; color:var(--muted)}
+.fl.done{border-bottom-style:solid; color:var(--line)}
+.fl.done .n{color:var(--ok)}
+.fl.now{background:var(--lead); color:var(--ink); border-bottom-style:solid}
+.fl.now .n{color:var(--ink)}
+@media(max-width:820px){
+  .section-nav{position:static; flex-direction:row-reverse}
+  .section-nav .roof{display:none}
+  .fl{flex:1; flex-direction:column; text-align:center; border-bottom:0; border-left:1.5px dashed var(--line-dim); padding:6px 2px}
+  .fl .t{display:none}
+  .fl:last-child{border-left:0}
+}
+
+/* panels */
+.panel{border:1.5px solid var(--line-dim); background:rgba(16,22,30,.9); padding:20px 22px; margin-bottom:22px}
+.story{font-size:1.08rem; max-width:68ch}
+.floor-tag{color:var(--lead); font-family:var(--head); font-weight:700; margin-bottom:.3em}
+
+/* gallery guide placards */
+details.guide{margin-bottom:22px; border:1.5px solid var(--line-dim); background:rgba(16,22,30,.9)}
+details.guide>summary{cursor:pointer; padding:14px 22px; font-family:var(--head); font-weight:700; font-size:1.2rem; list-style:none}
+details.guide>summary::before{content:"▸"; display:inline-block; margin-right:10px; color:var(--lead); transition:transform .15s}
+details.guide[open]>summary::before{transform:rotate(90deg)}
+.placards{display:grid; grid-template-columns:repeat(auto-fill,minmax(260px,1fr)); gap:14px; padding:4px 22px 22px}
+.placard{background:var(--paper); color:var(--paperink); border-left:6px solid var(--lead); padding:12px 14px; font-size:.93rem; line-height:1.5}
+.placard h4{font-family:var(--head); font-size:1.08rem; margin:0 0 .3em}
+.placard p{margin:0}
+
+/* puzzles */
+.puzzle{border:1.5px solid var(--line); background:rgba(16,22,30,.94); padding:20px 22px; margin-bottom:22px}
+.puzzle .ph{display:flex; justify-content:space-between; gap:12px; align-items:baseline; flex-wrap:wrap; margin-bottom:.4em}
+.puzzle .ph .pn{color:var(--muted); font-size:.9rem}
+.puzzle.solved{border-color:var(--ok); border-style:solid}
+.puzzle.solved h3::after{content:" ✓"; color:var(--ok)}
+.digit{display:inline-flex; align-items:center; gap:8px; background:var(--lead); color:var(--ink); padding:4px 12px; font-weight:600; font-family:var(--head); font-size:1.05rem}
+.prompt{max-width:70ch}
+.frow,.mrow{display:grid; grid-template-columns:minmax(0,1fr) minmax(0,260px); gap:8px 16px; align-items:center; margin:10px 0}
+@media(max-width:640px){.frow,.mrow{grid-template-columns:1fr}}
+input[type=text],input[type=number],select{
+  width:100%; font:inherit; color:var(--ink); background:#fff; border:2px solid transparent; padding:8px 10px; border-radius:0
+}
+input.ok{border-color:var(--ok)} input.no{border-color:var(--bad)}
+.orderlist{list-style:none; padding:0; margin:12px 0; counter-reset:o}
+.orderlist li{display:flex; justify-content:space-between; gap:12px; align-items:center; background:rgba(255,255,255,.07); border:1.5px solid var(--line-dim); padding:8px 10px; margin-bottom:6px; counter-increment:o}
+.orderlist li .otext::before{content:counter(o) ". "; color:var(--lead); font-weight:600}
+.obtns{display:flex; gap:4px}
+.mini{font:inherit; width:34px; height:34px; background:transparent; color:var(--line); border:1.5px solid var(--line); cursor:pointer}
+.mini:hover:not(:disabled){background:var(--line); color:var(--ink)}
+.mini:disabled{opacity:.3; cursor:default}
+.pickrow{display:flex; gap:10px; align-items:flex-start; padding:8px 10px; margin-bottom:6px; border:1.5px solid var(--line-dim); background:rgba(255,255,255,.07); cursor:pointer}
+.pickrow input{margin-top:5px; width:18px; height:18px; accent-color:var(--lead)}
+.actions{display:flex; gap:10px; flex-wrap:wrap; align-items:center; margin-top:14px}
+.btn{font:inherit; font-weight:600; background:var(--lead); color:var(--ink); border:2px solid var(--lead); padding:9px 18px; cursor:pointer}
+.btn:hover{background:#ffe07d}
+.btn.ghost{background:transparent; color:var(--line); border-color:var(--line-dim)}
+.btn.ghost:hover{border-color:var(--line); background:rgba(255,255,255,.08)}
+.msg{min-height:1.4em; margin-top:10px; font-weight:500}
+.msg.good{color:var(--ok)} .msg.bad{color:var(--bad)}
+.hints .hint{background:rgba(255,198,110,.12); border-left:4px solid var(--lead); padding:8px 12px; margin:8px 0 0; font-size:.95rem}
+.reveal{background:rgba(121,214,168,.1); border-left:4px solid var(--ok); padding:8px 12px; margin-top:8px}
+.cipher{font-family:var(--head); font-size:1.7rem; letter-spacing:.14em; background:rgba(255,255,255,.07); border:1.5px dashed var(--line-dim); padding:12px 16px; margin:12px 0; word-break:break-word}
+.tablewrap{overflow-x:auto}
+table.prog{border-collapse:collapse; margin:10px 0; background:var(--paper); color:var(--paperink)}
+table.prog th,table.prog td{border:1px solid #9bb4cc; padding:6px 12px; text-align:left}
+table.prog th{background:#dbe7f2}
+.paper{background:#fbf9f3; color:var(--paperink); padding:12px; margin:12px 0; max-width:520px}
+.paper svg{display:block; width:100%; height:auto}
+.legend{font-size:.88rem; margin:6px 0 0}
+
+/* gallery scene */
+.scene-wrap{position:relative; border:1.5px solid var(--line); margin-bottom:22px; background:#0b1016; line-height:0; overflow:hidden}
+.scene-wrap svg{display:block; width:100%; height:auto; min-height:190px; max-height:420px}
+.scene-tag{position:absolute; left:50%; bottom:0; transform:translateX(-50%); background:var(--lead); color:var(--ink); font-family:var(--head); font-weight:700; padding:4px 18px; line-height:1.3; font-size:1rem; white-space:nowrap; pointer-events:none}
+.rain{animation:rain 1.4s linear infinite}
+@keyframes rain{from{transform:translate(0,-5px); opacity:.15}50%{opacity:.7}to{transform:translate(-2px,7px); opacity:.1}}
+.flick{animation:flick 3.2s steps(1) infinite}
+@keyframes flick{0%,100%{opacity:1}46%{opacity:.55}50%{opacity:1}}
+
+/* drawing-sheet title block */
+.scene-wrap.flush{margin-bottom:0}
+.titleblock{display:grid; grid-template-columns:1.7fr .9fr 1.5fr .9fr .9fr; border:1.5px solid var(--line); border-top:1px solid var(--line-dim); margin-bottom:22px; background:rgba(14,19,25,.94)}
+.titleblock>div{padding:7px 14px; border-left:1px solid var(--line-dim); min-width:0}
+.titleblock>div:first-child{border-left:0}
+.titleblock small{display:block; color:var(--muted); font-size:.74rem; line-height:1.2}
+.titleblock span{display:block; font-family:var(--head); font-weight:600; font-size:.92rem; line-height:1.3}
+@media(max-width:700px){.titleblock{grid-template-columns:1fr 1fr}.titleblock>div:nth-child(odd){border-left:0}.titleblock>div:nth-child(n+3){border-top:1px solid var(--line-dim)}}
+
+/* hotspots */
+.hot{cursor:pointer; outline:none}
+.hot .hr{fill:rgba(255,198,110,.04); stroke:#ffc66e; stroke-width:2; stroke-dasharray:6 4}
+.hot:hover .hr,.hot:focus-visible .hr{fill:rgba(255,198,110,.22)}
+.hot:focus-visible .hr{stroke:#fff; stroke-width:3}
+.hot.done .hr{stroke:#6fd3a0; fill:rgba(121,214,168,.08)}
+.hot.key .hr{stroke:#ff8f7e}
+.hot.key.done .hr{stroke:#6fd3a0}
+.hot .badge circle{fill:#ffc66e; stroke:#0e1319; stroke-width:2.5}
+.hot.done .badge circle{fill:#6fd3a0}
+.hot .badge text{fill:#0e1319; font:700 16px "Josefin Sans",sans-serif; text-anchor:middle; dominant-baseline:central}
+.hot.todo .badge{animation:pulse 2.2s ease-in-out infinite; transform-box:fill-box; transform-origin:center}
+@keyframes pulse{50%{transform:scale(1.2)}}
+.hot .lab{opacity:0; pointer-events:none; transition:opacity .15s}
+.hot:hover .lab,.hot:focus-visible .lab{opacity:1}
+.hot .lab rect{fill:#0e1319; stroke:#ffc66e; stroke-width:1.5}
+.hot .lab text{fill:#ffc66e; font:600 12px "IBM Plex Sans",sans-serif; text-anchor:middle; dominant-baseline:central}
+.scenehint{margin:-8px 0 20px; color:var(--muted)}
+.scenehint b{color:var(--lead)}
+.tasklist{list-style:none; padding:0; margin:12px 0 0; display:grid; gap:8px}
+.taskbtn{width:100%; display:grid; grid-template-columns:38px 1fr auto; gap:12px; align-items:center; text-align:left; font:inherit; color:var(--line); background:rgba(255,255,255,.06); border:1.5px solid var(--line-dim); padding:10px 12px; cursor:pointer}
+.taskbtn:hover{border-color:var(--lead)}
+.taskbtn .tn{font-family:var(--head); font-weight:700; font-size:1.3rem; background:var(--lead); color:var(--ink); width:34px; height:34px; display:flex; align-items:center; justify-content:center}
+.taskbtn.done .tn{background:var(--ok)}
+.taskbtn .ts{color:var(--muted); font-size:.9rem}
+.page{max-width:860px; margin:0 auto; padding:22px 18px 50px}
+.page .crumbs{margin-bottom:14px}
+.after{margin-top:18px}
+
+/* lock */
+.lock{border:2px solid var(--lead); background:rgba(16,22,30,.96); padding:22px}
+.digits{display:flex; gap:10px; margin:12px 0; flex-wrap:wrap}
+.dg{width:66px; height:76px; border:1.5px dashed var(--line-dim); display:flex; flex-direction:column; align-items:center; justify-content:center; color:var(--muted)}
+.dg small{font-size:.78rem}
+.dg b{font-family:var(--head); font-size:2rem; line-height:1}
+.dg.on{border-style:solid; border-color:var(--lead); color:var(--lead)}
+.codein{display:flex; gap:10px; flex-wrap:wrap; align-items:center; margin-top:12px}
+.codein input{width:150px; font-family:var(--head); font-size:1.6rem; letter-spacing:.3em; text-align:center}
+.shake{animation:shake .35s}
+@keyframes shake{25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+
+/* start / transition / win */
+.hero{display:grid; grid-template-columns:minmax(0,1.2fr) minmax(0,.8fr); gap:34px; align-items:center; padding:46px 0}
+@media(max-width:820px){.hero{grid-template-columns:1fr}}
+.hero p.lead{font-size:1.15rem; max-width:56ch}
+.rules{padding-left:1.1em; max-width:60ch}
+.rules li{margin-bottom:.4em}
+.teamrow{display:flex; gap:10px; flex-wrap:wrap; margin:18px 0 6px}
+.teamrow input{max-width:300px}
+.keycards{display:flex; gap:10px; margin:14px 0; flex-wrap:wrap}
+.kc{width:62px; height:78px; background:var(--paper); color:var(--ink); border-left:6px solid var(--lead); display:flex; align-items:center; justify-content:center; font-family:var(--head); font-weight:700; font-size:2rem}
+.kc.empty{background:transparent; color:var(--muted); border:1.5px dashed var(--line-dim); border-left:1.5px dashed var(--line-dim)}
+.center{max-width:720px; margin:40px auto}
+.cert{background:var(--paper); color:var(--paperink); padding:34px 30px; border:6px double var(--ink); text-align:center; margin:22px 0}
+.cert h2{color:var(--ink)}
+.cert .big{font-family:var(--head); font-size:2rem; font-weight:700; margin:.2em 0}
+.two{display:grid; grid-template-columns:1fr 1fr; gap:22px}
+@media(max-width:760px){.two{grid-template-columns:1fr}}
+.foot{border-top:1.5px solid var(--line-dim); background:rgba(12,17,23,.96); padding:12px 0; position:sticky; bottom:0}
+.foot .wrap{display:flex; align-items:center; gap:14px; flex-wrap:wrap}
+.foot .kc{width:34px; height:42px; font-size:1.2rem; border-left-width:4px}
+.foot span.lbl{color:var(--muted); font-size:.9rem}
+
+@media(max-width:640px){.foot{position:static}}
+@media print{
+  body{background:#fff}
+  body *{visibility:hidden}
+  .cert,.cert *{visibility:visible}
+  .cert{position:absolute; left:0; top:0; width:100%; margin:0}
+}
+@media(prefers-reduced-motion:reduce){*{animation:none!important; transition:none!important; scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+<div id="app"></div>
+
+<script>
+/* ============================================================
+   GAME CONTENT
+   Edit text, hints and answers in this section.
+   ============================================================ */
+const MUSEUM = "Skyline Museum of Architecture";
+const TARGET_MIN = 60;
+
+const FLOOR_PLAN_SVG = `
+<svg viewBox="0 0 440 290" role="img" aria-label="Floor plan of a small house with three rooms: a living room on the left, a bedroom top right, and a bathroom bottom right">
+  <rect width="440" height="290" fill="#fbf9f3"/>
+  <rect x="30" y="30" width="380" height="220" fill="none" stroke="#12263d" stroke-width="8"/>
+  <path d="M220 30V70M220 110V250M220 140H300M340 140H410" stroke="#12263d" stroke-width="6" fill="none"/>
+  <!-- windows -->
+  <g fill="#fbf9f3" stroke="#12263d" stroke-width="1.5">
+    <rect x="70" y="26" width="80" height="8"/><line x1="70" y1="30" x2="150" y2="30"/>
+    <rect x="26" y="110" width="8" height="60"/><line x1="30" y1="110" x2="30" y2="170"/>
+    <rect x="270" y="26" width="80" height="8"/><line x1="270" y1="30" x2="350" y2="30"/>
+    <rect x="270" y="246" width="80" height="8"/><line x1="270" y1="250" x2="350" y2="250"/>
+  </g>
+  <!-- doors -->
+  <rect x="70" y="245" width="40" height="10" fill="#fbf9f3"/>
+  <g stroke="#12263d" fill="none">
+    <line x1="70" y1="250" x2="70" y2="210" stroke-width="2.5"/><path d="M70 210A40 40 0 0 1 110 250" stroke-width="1"/>
+    <line x1="220" y1="70" x2="180" y2="70" stroke-width="2.5"/><path d="M180 70A40 40 0 0 0 220 110" stroke-width="1"/>
+    <line x1="300" y1="140" x2="300" y2="100" stroke-width="2.5"/><path d="M300 100A40 40 0 0 1 340 140" stroke-width="1"/>
+  </g>
+  <g font-family="Georgia,serif" font-size="16" fill="#12263d" text-anchor="middle">
+    <text x="125" y="150">Living Room</text>
+    <text x="320" y="88">Bedroom</text>
+    <text x="320" y="205">Bathroom</text>
+  </g>
+</svg>`;
+
+const ROOMS = [
+/* ---------------- FLOOR 5 ---------------- */
+{
+  floor:5, short:"What is architecture?", name:"The Skyline Gallery",
+  story:`Rain taps on the glass dome of Floor 5. The museum has locked down for the night, the elevators are dead, and the only way out is the stairwell door at the end of this gallery. It has a four-digit keypad. The wall plaques explain what architecture is. Read them, then click the glowing exhibits to open and solve the four tasks. Each task reveals one digit.`,
+  guide:[
+    {t:"Architecture, defined", p:`Architecture is the art and science of designing buildings and the spaces around them so people can live, learn, work, heal, and gather in them. Architects mix creativity with math, science, safety rules, budgets, and a deep understanding of people.`},
+    {t:"The three qualities of a good building", p:`More than 2,000 years ago the Roman writer Vitruvius said a good building needs three things: <b>Firmitas</b> (it is strong and lasts), <b>Utilitas</b> (it is useful and works well for the people inside), and <b>Venustas</b> (it is beautiful and delights the senses).`},
+    {t:"Architects zoom in and out", p:`In one project an architect may think about the tiny details of a door handle, the shape of a room, the whole building, the site it sits on, and even how it fits into a neighborhood or city.`},
+    {t:"Specialties", p:`Many people work in design. <b>Building architects</b> design homes, schools, and offices. <b>Landscape architects</b> shape parks, plazas, and gardens. <b>Interior designers</b> plan the inside spaces. <b>Urban planners</b> decide how neighborhoods and cities grow. <b>Structural engineers</b> calculate how structures carry their weight.`},
+    {t:"The Caesar disk", p:`A famous old trick for secret messages is the Caesar cipher: every letter is shifted along the alphabet by a fixed number. The brass disk by the keypad is set to <b>3</b>. That means A became D, B became E, and so on.`}
+  ],
+  puzzles:[
+    {
+      id:"1a", title:"The three pillars", type:"multi", digit:4,
+      prompt:`Three buildings in the gallery are each missing one of Vitruvius&rsquo;s three qualities. Name the missing quality in plain English (one word each).`,
+      fields:[
+        {label:`<b>A.</b> A dazzling glass footbridge that cracks and collapses in the first big storm.`, answers:["strength","firmitas","durability","strong","stability","firmness"]},
+        {label:`<b>B.</b> A gorgeous, solid museum with no ramps or elevators and exits hidden behind exhibits.`, answers:["usefulness","utility","utilitas","function","functionality","useful","purpose"]},
+        {label:`<b>C.</b> A strong, efficient windowless block that students dread entering every morning.`, answers:["beauty","venustas","delight","aesthetics","beautiful","appearance"]}
+      ],
+      hints:[`Look at the three words on the second placard. Each one has an English meaning in parentheses.`,`A is missing Firmitas, B is missing Utilitas, and C is missing Venustas. Now translate each into one English word.`],
+      reveal:`Great buildings balance all three: strong, useful, and beautiful. Architects constantly trade these off against each other and against cost.`
+    },
+    {
+      id:"1b", title:"Zoom out", type:"order", digit:7,
+      prompt:`Put these things in order from the <b>smallest</b> scale an architect thinks about to the <b>largest</b>.`,
+      items:[`The design of a door handle`,`A single room`,`A whole building`,`The site: the building, parking, and landscape together`,`A neighborhood or city plan`],
+      start:[1,3,4,0,2],
+      hints:[`Start with the thing you could hold in your hand.`,`Handle, room, building, site, then the whole city.`],
+      reveal:`Architects switch scales all day, from millimeters to kilometers.`
+    },
+    {
+      id:"1c", title:"The brass disk", type:"multi", digit:2,
+      prompt:`A famous architectural slogan was scratched onto the wall in Caesar code. Decode it with the shift on the brass disk, then finish the slogan.
+        <div class="cipher" aria-label="Encoded message">IRUP IROORZV IXQFWLRQ</div>`,
+      fields:[{label:`Decoded, the slogan reads &ldquo;Form follows ______.&rdquo; Fill in the last word.`, answers:["function"]}],
+      hints:[`The disk says 3, so move each letter <i>back</i> three places in the alphabet. I becomes F. R becomes O.`,`The first word decodes to FORM and the second to FOLLOWS. Keep going with the third word.`],
+      reveal:`&ldquo;Form follows function&rdquo; was popularized by Chicago architect Louis Sullivan in the 1890s. It means a building&rsquo;s shape should grow out of its purpose.`
+    },
+    {
+      id:"1d", title:"Who does what?", type:"match", digit:9,
+      prompt:`Match each job description to the right design professional.`,
+      pairs:[
+        [`Designs the paths, plants, and seating of a city park`,`Landscape architect`],
+        [`Decides where new streets and neighborhoods should go`,`Urban planner`],
+        [`Plans the layout, finishes, and lighting inside a hotel lobby`,`Interior designer`],
+        [`Leads the design of a school building and coordinates the whole team`,`Building architect`],
+        [`Calculates whether beams and columns can safely carry the loads`,`Structural engineer`]
+      ],
+      options:[`Landscape architect`,`Urban planner`,`Interior designer`,`Building architect`,`Structural engineer`],
+      hints:[`Two of these jobs deal with places mostly outdoors or at city scale. Start there.`,`The last one is about math and physics. Engineers calculate; architects coordinate and shape.`],
+      reveal:`Architecture is a team sport. Many careers around the building share the same design world.`
+    }
+  ],
+  rule:{text:`Enter your four digits in order from <b>smallest to largest</b>.`, fn:d=>[...d].sort((a,b)=>a-b)},
+  letter:"L",
+  outro:`The keypad chirps green and the stairwell door clunks open. On the landing you find a keycard fragment stamped with the letter <b>L</b>. Hang on to it.`
+},
+/* ---------------- FLOOR 4 ---------------- */
+{
+  floor:4, short:"Famous architects", name:"The Hall of Visionaries",
+  story:`Floor 4. Portraits of legendary architects line the walls and scale models glow in glass cases. A mixed-up label and a scrambled prize wall stand between you and the next keypad. The placards have all the facts you need, but you will have to think carefully.`,
+  guide:[
+    {t:"Frank Lloyd Wright (USA, 1867&ndash;1959)", p:`Champion of &ldquo;organic architecture,&rdquo; where buildings grow out of their landscape. <b>Fallingwater</b> in Pennsylvania was built in the 1930s right over a waterfall.`},
+    {t:"Antoni Gaud&iacute; (Spain, 1852&ndash;1926)", p:`Used curves, columns like tree trunks, and colorful mosaics. His <b>Sagrada Fam&iacute;lia</b> in Barcelona began in 1882 and is still being completed.`},
+    {t:"J&oslash;rn Utzon (Denmark, 1918&ndash;2008)", p:`Won an international competition with sail-like shells for the <b>Sydney Opera House</b> in Australia.`},
+    {t:"I. M. Pei (China/USA, 1917&ndash;2019)", p:`Added a glass-and-steel pyramid to the <b>Louvre</b> museum in Paris, which opened in 1989.`},
+    {t:"Frank Gehry (Canada/USA, born 1929)", p:`Famous for sculptural, titanium-clad buildings such as the <b>Guggenheim Museum Bilbao</b> in Spain.`},
+    {t:"Renzo Piano (Italy, born 1937)", p:`Co-designed the Centre Pompidou in Paris and designed The Shard in London.`},
+    {t:"Zaha Hadid (Iraq/UK, 1950&ndash;2016)", p:`Known for flowing, futuristic curves, such as the Heydar Aliyev Center in Baku, Azerbaijan. She was the first woman to win the Pritzker Prize.`},
+    {t:"Maya Lin (USA, born 1959)", p:`Won the competition to design the <b>Vietnam Veterans Memorial</b> in Washington, D.C. while she was still a college undergraduate. It is two polished black granite walls.`},
+    {t:"Ludwig Mies van der Rohe (Germany/USA, 1886&ndash;1969)", p:`Pioneer of sleek steel-and-glass skyscrapers, including the <b>Seagram Building</b> in New York. His motto: &ldquo;Less is more.&rdquo;`},
+    {t:"The Pritzker Prize", p:`Architecture&rsquo;s highest honor, often compared to the Nobel Prize. It has been awarded every year since 1979.`},
+    {t:"Architect or engineer?", p:`Engineers calculate how structures stand up and survive loads. Architects shape the whole experience of a building: how it looks, works, and feels. Both are essential, and many famous structures were made by teams of both.`}
+  ],
+  puzzles:[
+    {
+      id:"2a", title:"Match the masterpiece", type:"match", digit:8,
+      prompt:`Match each architect to their masterpiece. Careful: one building in the list belongs to an architect <i>not</i> in the left column.`,
+      pairs:[
+        [`Frank Lloyd Wright`,`Fallingwater`],
+        [`Antoni Gaud&iacute;`,`Sagrada Fam&iacute;lia`],
+        [`J&oslash;rn Utzon`,`Sydney Opera House`],
+        [`I. M. Pei`,`Louvre Pyramid`],
+        [`Frank Gehry`,`Guggenheim Museum Bilbao`]
+      ],
+      options:[`Fallingwater`,`Sagrada Fam&iacute;lia`,`Sydney Opera House`,`Louvre Pyramid`,`Guggenheim Museum Bilbao`,`Seagram Building`],
+      hints:[`Which country is each building in? The placards name the places.`,`The Seagram Building belongs to Mies van der Rohe, so it is the decoy.`],
+      reveal:`Notice how different these buildings look. Every architect develops a signature approach.`
+    },
+    {
+      id:"2b", title:"Who am I?", type:"multi", digit:3,
+      prompt:`Three mystery portraits have lost their name tags. Identify each architect from the riddle (a last name is enough).`,
+      fields:[
+        {label:`<b>1.</b> &ldquo;My buildings flow like frozen waves, and in 2004 I made history as the first woman to win architecture&rsquo;s top prize.&rdquo;`, answers:["hadid","zaha hadid","zaha"]},
+        {label:`<b>2.</b> &ldquo;Barely out of my teens, I beat more than 1,400 entries to design a D.C. memorial from black granite while still a student.&rdquo;`, answers:["lin","maya lin","maya"]},
+        {label:`<b>3.</b> &ldquo;I believed in saying only what is necessary. My towers are steel, glass, and straight lines, and my three-word motto fits on a T-shirt.&rdquo;`, answers:["mies","mies van der rohe","ludwig mies van der rohe","van der rohe","ludwig mies"]}
+      ],
+      hints:[`Check the placards for Iraq/UK, a college undergraduate, and &ldquo;Less is more.&rdquo;`,`The answers are Hadid, Lin, and Mies van der Rohe.`],
+      reveal:`Both Hadid and Lin broke through in a field that had few women leaders, and each reshaped how we think about buildings and memorials.`
+    },
+    {
+      id:"2c", title:"The impostors", type:"pick", digit:6,
+      prompt:`Six names are on the Wall of Fame, but <b>two of them were not architects</b>. Select the two impostors.`,
+      options:[
+        `Julia Morgan &ndash; designed Hearst Castle in California and was the first woman licensed as an architect there.`,
+        `Gustave Eiffel &ndash; French engineer whose company built the iron Eiffel Tower.`,
+        `Norman Foster &ndash; designed &ldquo;The Gherkin&rdquo; tower in London.`,
+        `John A. Roebling &ndash; German-American engineer who designed the Brooklyn Bridge.`,
+        `I. M. Pei &ndash; designed the Louvre Pyramid.`,
+        `Zaha Hadid &ndash; designed the Heydar Aliyev Center.`
+      ],
+      correct:[1,3],
+      hints:[`Look at the job title in each description. Which professions are not &ldquo;architect&rdquo;?`,`Two of the six are described as engineers.`],
+      reveal:`Great teamwork between architects and engineers makes iconic structures possible. Their jobs overlap but differ: engineers make it stand up, architects make it a place for people.`
+    },
+    {
+      id:"2d", title:"The Pritzker wall", type:"order", digit:1,
+      prompt:`The years have been scratched off the Pritzker Prize wall. Use the clues to put these winners in order from the <b>earliest</b> winner to the <b>most recent</b>.
+        <ul>
+          <li>Pei won before anyone else on this list.</li>
+          <li>Hadid is the most recent winner on this list.</li>
+          <li>Gehry won before Piano did.</li>
+          <li>Utzon won in the year right before Hadid.</li>
+        </ul>`,
+      items:[`I. M. Pei`,`Frank Gehry`,`Renzo Piano`,`J&oslash;rn Utzon`,`Zaha Hadid`],
+      start:[3,0,4,1,2],
+      hints:[`Place Pei first and Hadid last. Utzon must sit right next to Hadid.`,`That leaves Gehry and Piano for the two middle slots, and Gehry comes first.`],
+      reveal:`The real years are Pei 1983, Gehry 1989, Piano 1998, Utzon 2003, and Hadid 2004.`
+    }
+  ],
+  rule:{text:`Enter your four digits in order from <b>largest to smallest</b>.`, fn:d=>[...d].sort((a,b)=>b-a)},
+  letter:"B",
+  outro:`The lock releases with a heavy thunk. Behind a panel you find a keycard fragment with the letter <b>B</b>. The stairs lead down to the design studio.`
+},
+/* ---------------- FLOOR 3 ---------------- */
+{
+  floor:3, short:"The design process", name:"The Design Studio",
+  story:`Floor 3 smells like pencil shavings and foam board. Half-built models crowd the tables and a whiteboard shows the architects&rsquo; &ldquo;design loop.&rdquo; Before you can open the next keypad you will have to think like a designer: gather information, understand a site, and make a layout work.`,
+  guide:[
+    {t:"The design process", p:`Architects follow steps, but they often loop back as they learn more. <b>1. Define the problem:</b> meet the client and list what they need (the &ldquo;program&rdquo;), plus budget and rules. <b>2. Research and site analysis:</b> study sun, wind, views, slope, neighbors, and zoning. <b>3. Brainstorm concepts:</b> many quick sketches and big ideas. <b>4. Schematic design:</b> pick a direction and draw rough room layouts. <b>5. Develop and refine:</b> choose materials and structure, build detailed models, coordinate with engineers. <b>6. Present and revise:</b> share with the client, take feedback, adjust.`},
+    {t:"Reading a site", p:`In the Northern Hemisphere the sun stays in the southern part of the sky, so south-facing windows catch the most sunlight in winter. A <b>setback</b> is the minimum distance a building must stay back from a property line. Zoning rules set limits like height and use.`},
+    {t:"The program", p:`The &ldquo;program&rdquo; is the client&rsquo;s list of required spaces, sizes, and needs. Architects add extra space for hallways and walls, often about 20% beyond the total of the room areas.`},
+    {t:"Bubble diagrams", p:`A bubble diagram is a quick sketch of circles that shows which spaces should be next to each other (like a kitchen near a garage) and which should be far apart (like bedrooms away from noise).`}
+  ],
+  puzzles:[
+    {
+      id:"3a", title:"Put the process in order", type:"order", digit:5,
+      prompt:`A real design team&rsquo;s week is mixed up on the whiteboard. Put the six events in the order they usually happen.`,
+      items:[
+        `Meets the principal and learns the school needs 12 classrooms, a gym, and a $5 million budget.`,
+        `Visits the empty lot, notes the steep slope toward a creek, and maps where the afternoon sun hits.`,
+        `Fills a sketchbook with twenty quick, wild ideas: round, tall, courtyard-shaped.`,
+        `Picks the strongest idea and draws a rough layout showing the gym beside the cafeteria.`,
+        `Chooses brick and wood, sizes the beams with the engineer, and builds a detailed model.`,
+        `Shows the school board, hears that parking is too small, and revises the plan.`
+      ],
+      start:[2,5,4,1,0,3],
+      hints:[`Use the six steps in the guide. Match each event to a step name first.`,`Define the problem, research the site, brainstorm, schematic design, develop and refine, then present and revise.`],
+      reveal:`Real projects loop through these steps many times. Feedback at the end often sends the team back to an earlier stage.`
+    },
+    {
+      id:"3b", title:"Reading the site", type:"multi", digit:2,
+      prompt:`The studio wall has three sticky notes with blanks to fill in.`,
+      fields:[
+        {label:`<b>A.</b> In Connecticut, large windows that capture the most winter sunlight should face which compass direction?`, answers:["south"]},
+        {label:`<b>B.</b> The rule that a building must stay a minimum distance from the property line is called a ______.`, answers:["setback","set back","setbacks"]},
+        {label:`<b>C.</b> The client&rsquo;s list of required rooms, sizes, and needs is called the ______.`, answers:["program","programme","design program","building program","architectural program"]}
+      ],
+      hints:[`All three terms are in the second and third guide placards.`,`The answers are south, setback, and program.`],
+      reveal:`Site analysis is detective work. Good architects find out everything about a place before they draw a single wall.`
+    },
+    {
+      id:"3c", title:"The program puzzle", type:"multi", digit:9,
+      prompt:`A town wants a small library. Its program is below. Use the guide&rsquo;s 20% rule for hallways and walls.
+        <div class="tablewrap"><table class="prog">
+          <tr><th>Space</th><th>Size</th></tr>
+          <tr><td>Reading room</td><td>20 ft &times; 30 ft</td></tr>
+          <tr><td>Children&rsquo;s room</td><td>15 ft &times; 20 ft</td></tr>
+          <tr><td>Office</td><td>10 ft &times; 12 ft</td></tr>
+          <tr><td>Two restrooms</td><td>8 ft &times; 10 ft each</td></tr>
+        </table></div>
+        Add 20% of the room total to cover hallways and walls.`,
+      fields:[{label:`What is the total area the building needs, in square feet?`, num:1416, ph:"Number of square feet"}],
+      hints:[`First multiply width by length for each room, then add them all up. Remember there are two restrooms.`,`The rooms total 1,180 sq ft. Add 20% of that to find the total.`],
+      reveal:`Architects call the room total &ldquo;net area&rdquo; and the total with hallways and walls &ldquo;gross area.&rdquo; Budget and zoning rules often limit gross area.`
+    },
+    {
+      id:"3d", title:"The bubble diagram", type:"order", digit:4,
+      prompt:`Arrange these four spaces in a row from <b>left to right</b>.
+        <ul>
+          <li>The garage is at the far left, on the street side.</li>
+          <li>The kitchen is right next to the garage (carrying groceries).</li>
+          <li>The living room sits between the kitchen and the bedroom.</li>
+          <li>The bedroom is as far from the noisy garage as possible.</li>
+        </ul>`,
+      items:[`Garage`,`Kitchen`,`Living room`,`Bedroom`],
+      start:[2,0,3,1],
+      hints:[`Garage goes first. The kitchen touches the garage.`,`Garage, kitchen, living room, bedroom.`],
+      reveal:`Bubble diagrams turn needs into relationships. Moving one circle changes how the whole house feels to live in.`
+    }
+  ],
+  rule:{text:`Enter the <b>odd digits first</b>, then the <b>even digits</b>. Within each group, keep the puzzle order (#1, #2, #3, #4).`, fn:d=>[...d.filter(x=>x%2===1),...d.filter(x=>x%2===0)]},
+  letter:"D",
+  outro:`The studio lock disengages. Under a roll of tracing paper you find a keycard fragment marked <b>D</b>. The next staircase smells like fresh blueprints.`
+},
+/* ---------------- FLOOR 2 ---------------- */
+{
+  floor:2, short:"Drawing types", name:"The Drafting Room",
+  story:`Floor 2 is lined with drafting tables, rolled blueprints, and scale rulers. A flickering lamp lights a half-finished set of drawings. The keypad light is dim, but the drawings might still teach you how to turn it bright.`,
+  guide:[
+    {t:"Site plan", p:`A bird&rsquo;s-eye view of the whole property. It shows the building outline, driveway, trees, and the north arrow.`},
+    {t:"Floor plan", p:`A horizontal slice through the building about four feet above the floor, looking straight down. It shows walls, doors, windows, and room names.`},
+    {t:"Elevation", p:`A straight-on view of one outside face of the building (front, back, or sides). It shows heights, windows, and materials with no perspective.`},
+    {t:"Section", p:`A vertical slice through the building, like cutting a cake. It shows floor heights, ceilings, stairs, and how the parts connect.`},
+    {t:"Perspective", p:`A realistic 3D-style view with vanishing points. Perspectives help clients picture what a building will feel like.`},
+    {t:"Detail drawing", p:`A large close-up that shows how pieces connect, such as where the roof meets the wall.`},
+    {t:"The language of lines", p:`<b>Heavy solid</b> lines show walls that are cut. <b>Dashed</b> lines show hidden or overhead things. <b>Dash-dot</b> (chain) lines mark centerlines. <b>Thin solid</b> lines with arrows and numbers are dimensions, meaning measurements.`},
+    {t:"Scale", p:`Drawings are smaller than real buildings, so they use a scale. At <b>1/4&Prime; = 1&prime;-0&Prime;</b>, every quarter inch on paper equals one foot in real life. That means 1 inch on paper equals 4 feet. At <b>1/8&Prime; = 1&prime;-0&Prime;</b>, 1 inch equals 8 feet.`}
+  ],
+  puzzles:[
+    {
+      id:"4a", title:"Name that drawing", type:"match", digit:6,
+      prompt:`Six drawings were mixed up on the table. Match each description to the right drawing type.`,
+      pairs:[
+        [`Shows where the building, driveway, and trees sit on the property`,`Site plan`],
+        [`A slice through the building that reveals ceiling heights and stairs`,`Section`],
+        [`A straight-on view of the front of the building`,`Elevation`],
+        [`A top-down view of the rooms, showing walls, doors, and windows`,`Floor plan`],
+        [`A realistic view with vanishing points to show the client`,`Perspective`],
+        [`A close-up of how the roof edge connects to the wall`,`Detail drawing`]
+      ],
+      options:[`Site plan`,`Floor plan`,`Elevation`,`Section`,`Perspective`,`Detail drawing`],
+      hints:[`The three flat drawings you view from the side are elevation, section, and detail. Read for &ldquo;straight-on,&rdquo; &ldquo;slice,&rdquo; and &ldquo;close-up.&rdquo;`,`Top-down views are site plans and floor plans. The site plan covers the whole property outdoors.`],
+      reveal:`A full set of drawings tells builders everything. No single view is enough.`
+    },
+    {
+      id:"4b", title:"Scale math", type:"multi", digit:1,
+      prompt:`Use the ruler on the table. Remember that at 1/4&Prime; = 1&prime;-0&Prime; one inch on paper is 4 feet.`,
+      fields:[
+        {label:`<b>A.</b> On a 1/4&Prime; = 1&prime;-0&Prime; drawing, a hallway measures 7 inches. How many feet long is the real hallway?`, num:28, ph:"Feet"},
+        {label:`<b>B.</b> At the same scale, a room is 15 feet wide. How many inches wide is it on the drawing? (Decimals are fine.)`, num:3.75, ph:"Inches"},
+        {label:`<b>C.</b> On a 1/8&Prime; = 1&prime;-0&Prime; drawing, a building face measures 4 inches. How many feet wide is the real building?`, num:32, ph:"Feet"}
+      ],
+      hints:[`Convert: at 1/4&Prime; scale, 1 inch is 4 ft. At 1/8&Prime; scale, 1 inch is 8 ft.`,`A: 7 &times; 4. B: 15 &divide; 4. C: 4 &times; 8.`],
+      reveal:`Scale lets architects fit a whole building on a sheet. A professional uses an architect&rsquo;s scale ruler to read measurements quickly.`
+    },
+    {
+      id:"4c", title:"Read the plan", type:"multi", digit:7,
+      prompt:`A finished floor plan is pinned to the board.
+        <div class="paper">${FLOOR_PLAN_SVG}</div>
+        <p class="legend"><b>How to read it:</b> a <b>door</b> is a gap in a wall with a straight leaf and a curved swing arc. A <b>window</b> is a thin line inside a gap in an outside wall.</p>`,
+      fields:[
+        {label:`How many <b>doors</b> are on the plan (including the entrance)?`, num:3, ph:"Number"},
+        {label:`How many <b>windows</b> are on the plan?`, num:4, ph:"Number"},
+        {label:`Which room has the <b>most windows</b>?`, answers:["living room","living","the living room"], ph:"Room name"}
+      ],
+      hints:[`Count the swing arcs for doors. Count the thin lines set in the outside walls for windows.`,`Doors: entrance, living room to bedroom, bedroom to bathroom. Check which room has two windows.`],
+      reveal:`Floor plans pack lots of information into simple symbols. After a little practice you can &ldquo;walk through&rdquo; a plan in your head.`
+    },
+    {
+      id:"4d", title:"The language of lines", type:"match", digit:3,
+      prompt:`Line weight and style carry meaning. Match each line to what it shows.`,
+      pairs:[
+        [`A <b>heavy solid</b> line`,`Walls that are cut by the drawing`],
+        [`A <b>dashed</b> line`,`Hidden or overhead features, like a beam above`],
+        [`A <b>dash-dot</b> (chain) line`,`A centerline, such as the middle of a column`],
+        [`A <b>thin solid</b> line with arrows and a number`,`A dimension: a measurement`]
+      ],
+      options:[`Walls that are cut by the drawing`,`Hidden or overhead features, like a beam above`,`A centerline, such as the middle of a column`,`A dimension: a measurement`],
+      hints:[`Re-read the &ldquo;language of lines&rdquo; placard.`,`Heavy means cut. Dashed means hidden. Dash-dot means center. Thin with arrows means measurement.`],
+      reveal:`This visual grammar is shared by architects around the world, so a drawing from anywhere can be read by anyone trained in it.`
+    }
+  ],
+  rule:{text:`Enter your four digits in <b>reverse order</b>: puzzle #4 first, then #3, #2, and #1.`, fn:d=>[...d].reverse()},
+  letter:"U",
+  outro:`The keypad flickers and turns green. Wedged in a drafting-table drawer you find a keycard fragment stamped <b>U</b>. You can see the lobby lights below.`
+},
+/* ---------------- FLOOR 1 ---------------- */
+{
+  floor:1, short:"Design to construction", name:"The Lobby",
+  story:`The ground floor at last! Through the glass doors you can see the street. One keypad guards the front doors, and beyond it is a final keycard lock. This floor is about what architects do from the first meeting with a client to the day the building opens.`,
+  guide:[
+    {t:"Phases of an architect&rsquo;s work (alphabetical)", p:`<b>Bidding and negotiation:</b> contractors price the job and the client picks a builder. <b>Construction administration:</b> the architect visits the site, answers questions, reviews the contractor&rsquo;s work, and checks quality until the building is done. <b>Construction documents:</b> complete drawings and written specifications used for permits, pricing, and building. <b>Design development:</b> materials, structure, and systems are chosen and detailed. <b>Programming (pre-design):</b> learn what the client needs, plus budget and schedule. <b>Schematic design:</b> rough layouts and the big idea.`},
+    {t:"Words you will hear on a job site", p:`An <b>RFI</b> (request for information) is a question from the contractor when something in the drawings is unclear. A <b>submittal</b> is a sample or product data the contractor sends for approval before ordering. A <b>change order</b> is a written change to the contract&rsquo;s scope, cost, or time. A <b>punch list</b> is the list of small unfinished or damaged items to fix at the end.`},
+    {t:"The team", p:`The <b>client</b> owns the project. The <b>architect</b> leads design. A <b>structural engineer</b> designs beams, columns, and foundations. <b>MEP engineers</b> design the mechanical (heating and cooling), electrical, and plumbing systems. A <b>civil engineer</b> handles grading, drainage, and utilities on the site. A <b>general contractor</b> builds it with crews of specialists.`},
+    {t:"The road to becoming an architect", p:`Typical steps: <b>1.</b> earn a degree from a program accredited by the <b>NAAB</b> (National Architectural Accrediting Board), either a 5-year Bachelor of Architecture or a bachelor&rsquo;s degree plus a 2&ndash;3 year Master of Architecture. <b>2.</b> log supervised work hours through the <b>AXP</b> (Architectural Experience Program). <b>3.</b> pass the <b>ARE</b> (Architect Registration Examination). <b>4.</b> get licensed by your state. The <b>AIA</b> (American Institute of Architects) is the professional membership organization. Rules vary a bit by state.`}
+  ],
+  puzzles:[
+    {
+      id:"5a", title:"From handshake to ribbon-cutting", type:"order", digit:9,
+      prompt:`Put the architect&rsquo;s phases in the order they happen, starting from the very first meeting.`,
+      items:[
+        `Learn what the client needs, plus the budget and schedule.`,
+        `Draw rough layouts and settle on the big idea.`,
+        `Choose materials and detail the structure and systems.`,
+        `Produce complete drawings and written specifications for permits and pricing.`,
+        `Contractors submit prices, and the client chooses a builder.`,
+        `Visit the site, answer questions, and review the contractor&rsquo;s work until the building is finished.`
+      ],
+      start:[2,5,4,1,0,3],
+      hints:[`The phases are listed in the guide by name. Match each description to one.`,`Programming, schematic design, design development, construction documents, bidding, construction administration.`],
+      reveal:`Architects stay involved long after the drawings are finished. Construction administration is where a design becomes a real building.`
+    },
+    {
+      id:"5b", title:"Job-site vocabulary", type:"match", digit:4,
+      prompt:`Match each moment on the job site to the right term.`,
+      pairs:[
+        [`The contractor asks: &ldquo;The drawings show an 8-inch wall but a 10-inch beam. Which is right?&rdquo;`,`RFI`],
+        [`The contractor sends a sample of floor tile for approval before ordering 5,000 of them.`,`Submittal`],
+        [`The client decides to add a skylight, so the contract price and schedule are officially adjusted in writing.`,`Change order`],
+        [`Near the end, the architect walks the building with a list of small unfinished or damaged items.`,`Punch list`]
+      ],
+      options:[`RFI`,`Submittal`,`Change order`,`Punch list`,`Bid`],
+      hints:[`Review the second placard. Ask yourself whether each moment is a question, a sample, a written contract change, or an end-of-job list.`,`The decoy is &ldquo;Bid&rdquo;, a price quote, which does not appear in any of the four situations.`],
+      reveal:`Clear communication is a core architect skill. A single answered RFI can save thousands of dollars and days of work.`
+    },
+    {
+      id:"5c", title:"Who do we call?", type:"multi", digit:8,
+      prompt:`The lobby phone is ringing with three problems. Name the right consultant for each (the role name is enough).`,
+      fields:[
+        {label:`<b>A.</b> &ldquo;The roof has to span 60 feet with no columns. Who calculates the beams?&rdquo;`, answers:["structural engineer","structural","structural engineers"]},
+        {label:`<b>B.</b> &ldquo;The air-conditioning duct won&rsquo;t fit above the ceiling, and the electrical panels need more room.&rdquo;`, answers:["mep","mep engineer","mep engineers","mechanical engineer","mechanical","mechanical engineers","mechanical electrical plumbing","mep consultant"]},
+        {label:`<b>C.</b> &ldquo;Rainwater floods the parking lot. We need grading, drains, and utility connections to the street.&rdquo;`, answers:["civil engineer","civil","civil engineers"]}
+      ],
+      hints:[`Look at the &ldquo;team&rdquo; placard.`,`A is structural, B is MEP (mechanical, electrical, plumbing), C is civil.`],
+      reveal:`An architect is like a conductor: you do not play every instrument, but you must understand them all so the whole piece comes together.`
+    },
+    {
+      id:"5d", title:"The road to licensure", type:"match", digit:2,
+      prompt:`A career poster is missing its labels. Match each step of the path to the right acronym.`,
+      pairs:[
+        [`The multi-part exam you pass to become a licensed architect`,`ARE`],
+        [`Supervised work hours you log while you train`,`AXP`],
+        [`The organization that accredits architecture degree programs`,`NAAB`],
+        [`The professional membership organization for architects (American Institute of Architects)`,`AIA`]
+      ],
+      options:[`ARE`,`AXP`,`NAAB`,`AIA`,`BIM`],
+      hints:[`Use the last placard. Each acronym is spelled out there.`,`The decoy is BIM (Building Information Modeling), software architects use.`],
+      reveal:`The path takes years, and many people begin in high school by taking art, math, and design classes and joining design clubs.`
+    }
+  ],
+  rule:{text:`Swap the <b>first and last</b> digits in puzzle order (#1 and #4), and leave the middle two where they are.`, fn:d=>{const a=[...d]; [a[0],a[3]]=[a[3],a[0]]; return a;}},
+  letter:"I",
+  outro:`The front-door keypad beeps, but the door still won&rsquo;t open. A small slot appears in the glass. It needs one final keyword.`
+}
+];
+
+const FINAL = {
+  id:"final", title:"The final keycard lock", type:"multi",
+  prompt:`The five keycard fragments you found glow faintly. Unscramble them to spell the one word that describes what happens to a design after the drawings are done. It is what the construction team does with the architect&rsquo;s plans.`,
+  fields:[{label:`Enter the five-letter word.`, answers:["build"], ph:"Five letters"}],
+  hints:[`Use the five letters on your keycards. Rearrange them.`,`It starts with B and ends with D.`],
+  reveal:`Exactly. Architects design, and then they help the team build.`
+};
+
+const FACULTY = [
+  ["Floor 5","Understanding what makes a building good."],
+  ["Floor 4","Learning from the greats."],
+  ["Floor 3","Following the design process."],
+  ["Floor 2","Reading and making drawings."],
+  ["Floor 1","Guiding design through construction."]
+];
+
+/* ============================================================
+   ENGINE
+   ============================================================ */
+/* ============================================================
+   SCENES: one-point-perspective museum galleries drawn in SVG
+   draw(floorIndex, state) where state is "locked", "ready" or "open"
+   ============================================================ */
+const SCN = (()=>{
+  const f=n=>Math.round(n*10)/10, P=(x,y)=>f(x)+","+f(y);
+  const rnd=i=>{const x=Math.sin(i*127.1+311.7)*43758.5453; return x-Math.floor(x);};
+  const BR="#e6c27f", PAPER="#eef1f4", INK="#10161d", HEAD="Josefin Sans,Avenir Next,sans-serif";
+  const wall=(side,u,v)=>{const x=side==="L"?u*260:1000-u*260, yt=u*70, yb=320-u*110; return [x,yt+v*(yb-yt)];};
+  const poly=(pts,a)=>`<polygon points="${pts.map(p=>P(p[0],p[1])).join(" ")}" ${a||""}/>`;
+  const wq=(side,u1,u2,v1,v2,a)=>poly([wall(side,u1,v1),wall(side,u2,v1),wall(side,u2,v2),wall(side,u1,v2)],a);
+  const cp=(s,t)=>[500+s*(500-t*260),t*70];
+  const fp=(s,t)=>[500+s*(500-t*260),320-t*110];
+  const cq=(s1,s2,t1,t2,a)=>poly([cp(s1,t1),cp(s2,t1),cp(s2,t2),cp(s1,t2)],a);
+  const fq=(s1,s2,t1,t2,a)=>poly([fp(s1,t1),fp(s2,t1),fp(s2,t2),fp(s1,t2)],a);
+  const K=t=>1-t*0.48;
+  const ln=(a,b,st,w,op)=>`<line x1="${f(a[0])}" y1="${f(a[1])}" x2="${f(b[0])}" y2="${f(b[1])}" stroke="${st}" stroke-width="${w||1}" ${op?`opacity="${op}"`:""}/>`;
+  const rect=(x,y,w,h,a)=>`<rect x="${f(x)}" y="${f(y)}" width="${f(w)}" height="${f(h)}" ${a||""}/>`;
+  const txt=(x,y,s,size,fill,a)=>`<text x="${f(x)}" y="${f(y)}" text-anchor="middle" font-family="${HEAD}" font-weight="700" font-size="${size}" fill="${fill}" ${a||""}>${s}</text>`;
+  const ell=(x,y,rx,ry,a)=>`<ellipse cx="${f(x)}" cy="${f(y)}" rx="${f(rx)}" ry="${f(ry)}" ${a||""}/>`;
+  const shadow=(x,y,rx,ry,op)=>ell(x,y,rx,ry,`fill="#000" opacity="${op||.5}" filter="url(#b5)"`);
+  const glow=(x,y,r,op)=>`<circle cx="${f(x)}" cy="${f(y)}" r="${f(r)}" fill="url(#gWarm)" opacity="${op||.6}"/>`;
+  const cone=(x,y0,w0,x1,y1,w1)=>poly([[x-w0,y0],[x+w0,y0],[x1+w1,y1],[x1-w1,y1]],`fill="url(#gCone)" filter="url(#b2)"`);
+  const box=(s,t,w,h,side,top)=>{const [x,y]=fp(s,t),k=K(t),W=w*k,H=h*k;
+    return shadow(x,y,W*.8,W*.14,.5)+rect(x-W/2,y,W,H*.35,`fill="${side}" opacity=".12" filter="url(#b2)"`)
+      +rect(x-W/2,y-H,W,H,`fill="${side}"`)+rect(x-W/2,y-H,W,H,`fill="url(#gShade)"`)
+      +rect(x-W/2,y-H,W,Math.max(3,H*.1),`fill="${top}"`)+rect(x-W/2,y-H,W,1.2,`fill="#fff" opacity=".4"`);};
+
+  const defs=c=>`<defs>
+    <filter id="b2" filterUnits="userSpaceOnUse" x="-200" y="-200" width="1400" height="800"><feGaussianBlur stdDeviation="2"/></filter>
+    <filter id="b5" filterUnits="userSpaceOnUse" x="-200" y="-200" width="1400" height="800"><feGaussianBlur stdDeviation="5"/></filter>
+    <filter id="b12" filterUnits="userSpaceOnUse" x="-200" y="-200" width="1400" height="800"><feGaussianBlur stdDeviation="12"/></filter>
+    <linearGradient id="gC" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${c.ceilA}"/><stop offset="1" stop-color="${c.ceilB}"/></linearGradient>
+    <linearGradient id="gW" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="${c.wallLo}"/><stop offset=".5" stop-color="${c.wallHi}"/><stop offset="1" stop-color="${c.wallLo}"/></linearGradient>
+    <linearGradient id="gWv" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#000" stop-opacity=".4"/><stop offset=".4" stop-color="#000" stop-opacity="0"/><stop offset="1" stop-color="#fff" stop-opacity=".06"/></linearGradient>
+    <linearGradient id="gL" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="${c.sideA}"/><stop offset="1" stop-color="${c.sideB}"/></linearGradient>
+    <linearGradient id="gR" x1="1" y1="0" x2="0" y2="0"><stop offset="0" stop-color="${c.sideA}"/><stop offset="1" stop-color="${c.sideB}"/></linearGradient>
+    <linearGradient id="gF" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${c.floorFar}"/><stop offset="1" stop-color="${c.floorNear}"/></linearGradient>
+    <radialGradient id="gFR" cx=".5" cy=".05" r=".75"><stop offset="0" stop-color="#fff" stop-opacity=".26"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient>
+    <radialGradient id="gWarm"><stop offset="0" stop-color="#fff0c8" stop-opacity=".95"/><stop offset=".35" stop-color="#ffc66e" stop-opacity=".45"/><stop offset="1" stop-color="#ff9d3d" stop-opacity="0"/></radialGradient>
+    <linearGradient id="gCone" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff2d0" stop-opacity=".32"/><stop offset="1" stop-color="#fff2d0" stop-opacity="0"/></linearGradient>
+    <linearGradient id="gShade" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#fff" stop-opacity=".22"/><stop offset=".6" stop-color="#000" stop-opacity=".05"/><stop offset="1" stop-color="#000" stop-opacity=".32"/></linearGradient>
+    <linearGradient id="gSky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0f2145"/><stop offset=".55" stop-color="#40608f"/><stop offset="1" stop-color="#f0a45f"/></linearGradient>
+    <linearGradient id="gStone" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ddd7cb"/><stop offset="1" stop-color="#b3ac9d"/></linearGradient>
+    <radialGradient id="gBrass" cx=".38" cy=".35" r=".8"><stop offset="0" stop-color="#fbe8b0"/><stop offset=".55" stop-color="#c8963a"/><stop offset="1" stop-color="#7a5418"/></radialGradient>
+    <linearGradient id="gCol" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#6d7783"/><stop offset=".3" stop-color="#f1f4f7"/><stop offset=".65" stop-color="#a5afba"/><stop offset="1" stop-color="#555f6b"/></linearGradient>
+    <linearGradient id="gSteel" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#6a7582"/><stop offset=".45" stop-color="#c9d1da"/><stop offset="1" stop-color="#76818e"/></linearGradient>
+    <linearGradient id="gGlass" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".3"/><stop offset=".5" stop-color="#fff" stop-opacity=".04"/><stop offset="1" stop-color="#fff" stop-opacity=".12"/></linearGradient>
+    <linearGradient id="gDoor" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff6d8"/><stop offset="1" stop-color="#f2a640"/></linearGradient>
+    <linearGradient id="gGrade" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2c4f8a" stop-opacity=".16"/><stop offset=".5" stop-color="#000" stop-opacity="0"/><stop offset="1" stop-color="#ff9d3d" stop-opacity=".1"/></linearGradient>
+    <radialGradient id="gVig" cx=".5" cy=".5" r=".78"><stop offset=".5" stop-color="#000" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity=".6"/></radialGradient>
+  </defs>`;
+
+  function floorMat(kind){
+    let o="";
+    if(kind==="wood"){
+      for(let i=-10;i<10;i++){const s1=i*.1; o+=fq(s1,s1+.1,0,1,`fill="${rnd(i+3)>.5?"#fff":"#000"}" opacity="${f(.03+rnd(i)*.09)}"`)+ln(fp(s1,1),fp(s1,0),"#000",1,.3);}
+      for(let i=-10;i<10;i++){const t=rnd(i+40); o+=ln(fp(i*.1,t),fp(i*.1+.1,t),"#000",1,.25);}
+    } else {
+      const T=[0,.1,.22,.38,.58,.8,1];
+      for(let j=0;j<6;j++)for(let i=-5;i<5;i++) o+=fq(i*.2,i*.2+.2,T[j],T[j+1],`fill="${rnd(i*9+j)>.5?"#fff":"#000"}" opacity="${f(.02+rnd(i*5+j+2)*.07)}"`);
+      for(let i=-5;i<=5;i++) o+=ln(fp(i*.2,1),fp(i*.2,0),"#000",1,.22);
+      T.forEach(t=>{o+=ln(fp(-1,t),fp(1,t),"#000",1,.22);});
+      if(kind==="marble") for(let k=0;k<10;k++){const a=fp(-1+rnd(k)*2,rnd(k+20)), b=fp(-1+rnd(k+60)*2,rnd(k+80)); o+=ln(a,b,"#fff",1,.07)+ln([a[0]+14,a[1]+3],[b[0]+10,b[1]-4],"#000",1,.06);}
+    }
+    return o;
+  }
+
+  function shell(c){
+    let o=defs(c);
+    o+=`<polygon points="0,0 1000,0 740,70 260,70" fill="url(#gC)"/>`;
+    [.3,.55,.8].forEach(t=>{o+=ln(cp(-1,t),cp(1,t),"#000",3,.24)+ln(cp(-1,t+.02),cp(1,t+.02),"#fff",1,.07);});
+    [-.66,-.33,0,.33,.66].forEach(s=>{o+=ln(cp(s,0),cp(s,1),"#000",1.5,.14);});
+    o+=`<polygon points="0,0 260,70 260,210 0,320" fill="url(#gL)"/><polygon points="1000,0 740,70 740,210 1000,320" fill="url(#gR)"/>`;
+    for(let i=1;i<9;i++){const u=i/9;["L","R"].forEach(sd=>{const a=wall(sd,u,0),b=wall(sd,u,1),d=sd==="L"?1.2:-1.2; o+=ln(a,b,"#000",1,.16)+ln([a[0]+d,a[1]],[b[0]+d,b[1]],"#fff",1,.05);});}
+    o+=rect(260,70,480,140,`fill="url(#gW)"`)+rect(260,70,480,140,`fill="url(#gWv)"`);
+    for(let x=308;x<740;x+=48) o+=ln([x,70],[x,210],"#000",1,.12)+ln([x+1.2,70],[x+1.2,210],"#fff",1,.05);
+    o+=rect(260,196,480,14,`fill="#000" opacity=".3"`)+rect(260,195,480,1.2,`fill="#fff" opacity=".14"`);
+    o+=`<polygon points="0,320 260,210 740,210 1000,320" fill="url(#gF)"/>`+floorMat(c.kind)+`<polygon points="0,320 260,210 740,210 1000,320" fill="url(#gFR)"/>`;
+    o+=`<polyline points="0,320 260,210 740,210 1000,320" fill="none" stroke="#000" stroke-width="12" opacity=".4" filter="url(#b5)"/>`;
+    o+=`<polyline points="0,0 260,70 740,70 1000,0" fill="none" stroke="#000" stroke-width="12" opacity=".35" filter="url(#b5)"/>`;
+    o+=rect(255,70,10,140,`fill="#000" opacity=".4" filter="url(#b5)"`)+rect(735,70,10,140,`fill="#000" opacity=".4" filter="url(#b5)"`);
+    if(c.lights){[-.34,.34].forEach(s=>{
+      o+=poly([fp(s-.14,.08),fp(s+.14,.08),fp(s+.14,.92),fp(s-.14,.92)],`fill="#ffe2b0" opacity=".1" filter="url(#b12)"`);
+      o+=cq(s-.06,s+.06,.06,.94,`fill="#ffd28a" opacity=".6" filter="url(#b5)"`)+cq(s-.028,s+.028,.06,.94,`fill="#fff8e6"`);});}
+    return o;
+  }
+  function keypad(state,kx,ky){
+    const led=state==="locked"?"#ff6b5a":"#6fe3a6";
+    let o=rect(kx-2,ky-2,26,38,`fill="#000" opacity=".5" filter="url(#b2)"`)+rect(kx,ky,22,34,`fill="url(#gSteel)"`)+rect(kx+2,ky+2,18,30,`fill="#0b121a"`);
+    o+=`<circle cx="${kx+11}" cy="${ky+7}" r="8" fill="${led}" opacity=".45" filter="url(#b2)"/><circle cx="${kx+11}" cy="${ky+7}" r="3" fill="${led}"/>`;
+    for(let r=0;r<3;r++)for(let c=0;c<3;c++)o+=`<circle cx="${kx+5.5+c*5.5}" cy="${ky+16+r*5.5}" r="1.5" fill="#aab6c4"/>`;
+    return o;
+  }
+  function signBox(x,y,w,label){return rect(x-4,y-4,w+8,23,`fill="#6fe3a6" opacity=".35" filter="url(#b5)"`)+rect(x,y,w,15,`fill="#07110d" stroke="#6fe3a6" stroke-width="1"`)+txt(x+w/2,y+11.2,label,9.5,"#8cf0bd");}
+  function stairDoor(state){
+    let o=rect(434,102,132,112,`fill="#000" opacity=".45" filter="url(#b5)"`);
+    if(state==="open"){
+      o+=rect(440,108,120,102,`fill="url(#gDoor)"`);
+      for(let i=0;i<7;i++) o+=ln([440,124+i*13],[560,124+i*13],"#9a5a10",2,.45);
+      o+=rect(440,108,20,102,`fill="#4a5360"`)+rect(540,108,20,102,`fill="#4a5360"`);
+      o+=poly([[430,210],[570,210],[690,320],[310,320]],`fill="#ffd28a" opacity=".3" filter="url(#b5)"`)+glow(500,170,110,.55);
+    } else {
+      o+=rect(440,108,120,102,`fill="url(#gSteel)"`)+rect(440,108,120,102,`fill="url(#gShade)" opacity=".5"`);
+      o+=rect(452,118,36,44,`fill="#0b1724"`)+rect(512,118,36,44,`fill="#0b1724"`)+rect(452,118,36,44,`fill="url(#gGlass)"`)+rect(512,118,36,44,`fill="url(#gGlass)"`);
+      o+=ln([500,108],[500,210],"#1b222b",2)+rect(440,196,120,14,`fill="#000" opacity=".25"`);
+      o+=rect(488,150,4,26,`fill="#e9eef3"`)+rect(508,150,4,26,`fill="#e9eef3"`)+`<rect x="440" y="108" width="120" height="102" fill="none" stroke="#10161d" stroke-width="4"/>`;
+    }
+    return o+signBox(455,86,90,"STAIRS &#9660;")+keypad(state,578,140);
+  }
+  function glassDoors(state){
+    let o=rect(388,96,224,118,`fill="#000" opacity=".45" filter="url(#b5)"`)+rect(395,100,210,110,`fill="#10161d"`);
+    o+=rect(400,105,200,105,`fill="url(#gSky)"`);
+    for(let i=0;i<9;i++){const x=402+i*22,h2=22+rnd(i)*34; o+=rect(x,190-h2,18,h2,`fill="#0a111b"`); for(let k=0;k<3;k++) if(rnd(i*3+k)>.4) o+=rect(x+4+(k%2)*6,190-h2+5+k*9,3,4,`fill="#ffcf82" opacity=".9"`);}
+    o+=rect(400,190,200,20,`fill="#1c2733"`)+rect(400,190,200,2,`fill="#ffcf82" opacity=".35"`);
+    o+=glow(450,150,34,.7)+ln([450,205],[450,136],"#06101f",3)+`<circle cx="450" cy="134" r="4.5" fill="#fff0c0"/>`+rect(420,196,60,12,`fill="#ffcf82" opacity=".16" filter="url(#b2)"`);
+    if(state==="open"){
+      o+=rect(400,105,26,105,`fill="url(#gGlass)" stroke="#10161d" stroke-width="3"`)+rect(574,105,26,105,`fill="url(#gGlass)" stroke="#10161d" stroke-width="3"`);
+      o+=poly([[400,214],[600,214],[740,320],[260,320]],`fill="#9fc0ff" opacity=".2" filter="url(#b5)"`);
+    } else {
+      o+=rect(400,105,98,105,`fill="url(#gGlass)" stroke="#10161d" stroke-width="3"`)+rect(502,105,98,105,`fill="url(#gGlass)" stroke="#10161d" stroke-width="3"`);
+      o+=rect(487,150,4,26,`fill="#e9eef3"`)+rect(509,150,4,26,`fill="#e9eef3"`);
+      o+=poly([[400,214],[600,214],[700,320],[300,320]],`fill="#8fb0e8" opacity=".1" filter="url(#b5)"`);
+    }
+    return o+signBox(470,80,60,"EXIT")+keypad(state,620,140);
+  }
+  const column=(s,t)=>{const [x,y]=fp(s,t),k=K(t),w=24*k,h=118*k;
+    let o=shadow(x,y,w*1.2,w*.22,.5)+rect(x-w/2,y+2,w,h*.3,`fill="url(#gCol)" opacity=".13" filter="url(#b2)"`);
+    o+=rect(x-w*.7,y-6*k,w*1.4,6*k,`fill="#9aa5b1"`)+rect(x-w/2,y-h,w,h-6*k,`fill="url(#gCol)"`);
+    for(let i=1;i<5;i++) o+=ln([x-w/2+i*w/5,y-h],[x-w/2+i*w/5,y-6*k],"#000",1,.1);
+    return o+rect(x-w*.75,y-h-8*k,w*1.5,8*k,`fill="#e6ebf0"`)+rect(x-w*.75,y-h-8*k,w*1.5,1.5,`fill="#fff" opacity=".6"`);};
+
+  /* floor 5 */
+  function art5(){
+    let o=cq(-.72,.72,.1,.95,`fill="url(#gSky)"`)+ell(500,34,130,9,`fill="#ffb878" opacity=".5" filter="url(#b5)"`);
+    [-.36,0,.36].forEach(s=>{o+=ln(cp(s,.1),cp(s,.95),"#0c1218",3,.95)+ln(cp(s+.01,.1),cp(s+.01,.95),"#fff",1,.2);});
+    [.4,.68].forEach(t=>{o+=ln(cp(-.72,t),cp(.72,t),"#0c1218",3,.95);});
+    o+=cq(-.72,.72,.1,.95,`fill="none" stroke="#0c1218" stroke-width="4"`);
+    for(let i=0;i<26;i++){const p=cp(-.7+rnd(i)*1.4,.12+rnd(i+50)*.8); o+=`<line class="rain" style="animation-delay:${f(rnd(i+9)*1.4)}s" x1="${f(p[0])}" y1="${f(p[1])}" x2="${f(p[0]-3)}" y2="${f(p[1]+6)}" stroke="#d7e8fb" stroke-width="1.2"/>`;}
+    o+=fq(-.98,-.55,.1,.62,`fill="#ffb067" opacity=".16" filter="url(#b12)"`)+fq(.55,.98,.1,.62,`fill="#ffb067" opacity=".16" filter="url(#b12)"`);
+    ["L","R"].forEach((sd,j)=>{
+      o+=wq(sd,.1,.58,.12,.78,`fill="url(#gSky)"`);
+      for(let i=0;i<6;i++){const u1=.1+i*.08,vt=.38+rnd(i+j*9)*.3; o+=wq(sd,u1,u1+.065,vt,.78,`fill="#070d16"`);
+        for(let k=0;k<3;k++){const v=vt+.05+k*.09; if(v+.04<.76&&rnd(i*7+k+j)>.35) o+=wq(sd,u1+.012,u1+.026,v,v+.035,`fill="#ffcf82" opacity=".9"`);}}
+      o+=wq(sd,.1,.34,.12,.78,`fill="#fff" opacity=".06"`)+wq(sd,.1,.58,.12,.78,`fill="none" stroke="#10161d" stroke-width="3.5"`)+wq(sd,.335,.345,.12,.78,`fill="#10161d"`)+wq(sd,.1,.58,.44,.45,`fill="#10161d"`);
+    });
+    const tab=(x,y,w,t)=>rect(x+3,y+4,w,34,`fill="#000" opacity=".5" filter="url(#b2)"`)+rect(x,y,w,34,`fill="url(#gStone)"`)+rect(x,y,w,1.5,`fill="#fff" opacity=".6"`)+txt(x+w/2+.7,y+20.7,t,9.5,"#fff",'opacity=".6"')+txt(x+w/2,y+20,t,9.5,"#3b4048");
+    o+=tab(280,98,70,"FIRMITAS")+tab(360,98,70,"UTILITAS")+tab(616,98,74,"VENUSTAS");
+    o+=shadow(693,172,22,6,.4)+`<circle cx="690" cy="168" r="19" fill="url(#gBrass)"/><circle cx="690" cy="168" r="13" fill="none" stroke="#6a4812" stroke-width="1" opacity=".7"/>`;
+    for(let i=0;i<12;i++){const a=i*Math.PI/6; o+=ln([690+15*Math.cos(a),168+15*Math.sin(a)],[690+19*Math.cos(a),168+19*Math.sin(a)],"#6a4812",1.2);}
+    o+=txt(690,173,"3",14,"#5a3c0c");
+    o+=rect(282,148,148,34,`fill="#000" opacity=".45" filter="url(#b2)"`)+rect(282,148,148,34,`fill="#0a121b" stroke="#2a3644" stroke-width="1.5"`)+rect(282,148,148,34,`fill="url(#gGlass)"`)+txt(356,159,"WHO&rsquo;S WHO",8,"#ffd9a0");
+    for(let i=0;i<3;i++) o+=ln([292,166+i*5],[330+i*18,166+i*5],"#9db9d2",1.6,.8)+ln([380,166+i*5],[418,166+i*5],"#9db9d2",1.6,.6);
+    return o+column(-.62,.5)+column(.62,.5);
+  }
+  /* floor 4 */
+  function portrait(sd,u1,u2,i){
+    let o=wq(sd,u1-.025,u2+.025,.1,.84,`fill="#ffd9a0" opacity=".14" filter="url(#b5)"`);
+    const [sx0,sy0]=wall(sd,(u1+u2)/2,.2);
+    o+=cone(sx0,wall(sd,(u1+u2)/2,0)[1],4,sx0,sy0+4,26);
+    o+=wq(sd,u1,u2,.2,.74,`fill="#2b1d14"`)+wq(sd,u1+.008,u2-.008,.22,.72,`fill="${BR}"`)+wq(sd,u1+.016,u2-.016,.235,.705,`fill="#16243b"`);
+    const um=(u1+u2)/2,[cx,cy]=wall(sd,um,.4),a=wall(sd,u1,.24),b=wall(sd,u2,.24),w=Math.abs(b[0]-a[0]),hh=wall(sd,um,.7)[1]-wall(sd,um,.24)[1];
+    const tones=["#e8c9a0","#c79b7a","#f0d8b8","#a97c5a"];
+    o+=ell(cx,cy,w*.2,hh*.13,`fill="${tones[i%4]}"`)+ell(cx-w*.04,cy-hh*.03,w*.06,hh*.04,`fill="#fff" opacity=".25"`);
+    const [sx,sy]=wall(sd,um,.62);
+    o+=ell(sx,sy,w*.34,hh*.075,`fill="#3d5a80"`)+wq(sd,u1+.016,u2-.016,.235,.705,`fill="url(#gGlass)"`);
+    return o;
+  }
+  function elev(x,y,w,h,n){
+    let o=rect(x+3,y+4,w,h,`fill="#000" opacity=".5" filter="url(#b2)"`)+rect(x,y,w,h,`fill="#14110f"`)+rect(x+3,y+3,w-6,h-6,`fill="${PAPER}"`);
+    const L=`stroke="${INK}" stroke-width="1.4" fill="none"`, bx=x+9,by=y+h-9,bw=w-18;
+    if(n===0) o+=`<path d="M${f(bx)} ${f(by)}L${f(x+w/2)} ${f(y+11)}L${f(bx+bw)} ${f(by)}Z" ${L}/>`;
+    if(n===1) o+=`<path d="M${f(bx)} ${f(by)}C${f(bx+bw*.2)} ${f(y+8)} ${f(bx+bw*.5)} ${f(by-6)} ${f(bx+bw*.65)} ${f(y+12)}S${f(bx+bw)} ${f(by-14)} ${f(bx+bw)} ${f(by)}Z" ${L}/>`;
+    if(n===2) o+=`<path d="M${f(bx)} ${f(by)}V${f(by-14)}H${f(bx+bw*.3)}V${f(by-26)}H${f(bx+bw*.6)}V${f(by-38)}H${f(bx+bw)}V${f(by)}Z" ${L}/>`;
+    if(n===3) o+=`<path d="M${f(bx)} ${f(by)}V${f(y+22)}H${f(bx+bw)}V${f(by)}M${f(bx+bw*.25)} ${f(by)}V${f(y+34)}A${f(bw*.25)} ${f(bw*.25)} 0 0 1 ${f(bx+bw*.75)} ${f(y+34)}V${f(by)}" ${L}/>`;
+    return o+rect(x+3,y+3,w-6,h-6,`fill="url(#gGlass)"`);
+  }
+  function art4(){
+    let o="";
+    ["L","R"].forEach((sd,j)=>[[.12,.26],[.33,.46],[.54,.66],[.73,.83]].forEach((p,i)=>o+=portrait(sd,p[0],p[1],i+j*2)));
+    o+=rect(270,92,170,70,`fill="#ffd9a0" opacity=".1" filter="url(#b5)"`)+rect(606,92,134,70,`fill="#ffd9a0" opacity=".1" filter="url(#b5)"`);
+    o+=elev(278,96,68,58,0)+elev(354,96,72,58,1)+elev(614,96,58,58,2)+elev(680,96,52,58,3);
+    [[-.62,.4,0],[.62,.4,1],[-.3,.74,2],[.3,.74,3]].forEach(([s,t,m])=>{
+      const [x,y]=fp(s,t),k=K(t),bt=y-46*k;
+      o+=poly([[x-6*k,t*70+4],[x+6*k,t*70+4],[x+34*k,bt-34*k],[x-34*k,bt-34*k]],`fill="url(#gCone)" filter="url(#b2)"`);
+      o+=ell(x,y+3,34*k,6*k,`fill="#ffd9a0" opacity=".16" filter="url(#b5)"`);
+      o+=box(s,t,56,46,"#d5dbe2","#f4f7fa");
+      o+=glow(x,bt-16*k,26*k,.5);
+      const m0=[`<path d="M${f(x-14*k)} ${f(bt)}L${f(x)} ${f(bt-26*k)}L${f(x+14*k)} ${f(bt)}Z" fill="#a9d6f5"/>`,
+        `<path d="M${f(x-16*k)} ${f(bt)}Q${f(x-12*k)} ${f(bt-28*k)} ${f(x-2*k)} ${f(bt-8*k)}Z M${f(x)} ${f(bt)}Q${f(x+6*k)} ${f(bt-30*k)} ${f(x+16*k)} ${f(bt-4*k)}Z" fill="#f6e3a8"/>`,
+        `<path d="M${f(x-18*k)} ${f(bt)}C${f(x-12*k)} ${f(bt-32*k)} ${f(x-2*k)} ${f(bt-4*k)} ${f(x+4*k)} ${f(bt-22*k)}S${f(x+16*k)} ${f(bt-30*k)} ${f(x+18*k)} ${f(bt)}Z" fill="${BR}"/>`,
+        `<path d="M${f(x-14*k)} ${f(bt)}V${f(bt-8*k)}H${f(x-8*k)}V${f(bt-18*k)}H${f(x-2*k)}V${f(bt-30*k)}H${f(x+4*k)}V${f(bt-14*k)}H${f(x+14*k)}V${f(bt)}Z" fill="#d8c8ff"/>`][m];
+      o+=m0+rect(x-24*k,bt-36*k,48*k,36*k,`fill="url(#gGlass)" stroke="#e7f1fb" stroke-width="1" stroke-opacity=".6"`);
+    });
+    return o;
+  }
+  /* floor 3 */
+  function sketchWall(sd,list){
+    let o="";
+    list.forEach(([u1,u2,v1,v2])=>{o+=wq(sd,u1+.006,u2+.006,v1+.012,v2+.012,`fill="#000" opacity=".35" filter="url(#b2)"`)+wq(sd,u1,u2,v1,v2,`fill="${PAPER}"`)+wq(sd,u1+.012,u2-.012,v1+.1,v1+.14,`fill="#6b8fb3"`)+wq(sd,u1+.012,u2-.03,v1+.2,v1+.23,`fill="#6b8fb3"`)+wq(sd,u1+.02,u1+.05,v1+.3,v2-.05,`fill="#9bb6d1"`);
+      const [px,py]=wall(sd,(u1+u2)/2,v1); o+=`<circle cx="${f(px)}" cy="${f(py+3)}" r="2.6" fill="#e5483a"/>`;});
+    return o;
+  }
+  function pendant(s,t){
+    const [x,y]=cp(s,t);
+    return ln([x,y],[x,y+50],"#0a0d10",1.4)+glow(x,y+60,48,.75)+ell(x,y+82,40,9,`fill="#ffd9a0" opacity=".18" filter="url(#b5)"`)+poly([[x-15,y+52],[x+15,y+52],[x+9,y+38],[x-9,y+38]],`fill="#2a2f35"`)+rect(x-13,y+51,26,3,`fill="#fff3c9"`);
+  }
+  function art3(){
+    let o=pendant(-.5,.45)+pendant(.5,.45);
+    o+=rect(272,86,164,102,`fill="#ffe2b0" opacity=".1" filter="url(#b5)"`);
+    o+=rect(281,96,150,86,`fill="#000" opacity=".5" filter="url(#b2)"`)+rect(278,92,150,86,`fill="#f6f8fa" stroke="#aeb7c0" stroke-width="3"`)+rect(278,92,150,86,`fill="url(#gGlass)"`);
+    const nc=["#ffd45e","#9fd0f0","#ff9f8a","#a8e6c1","#c9b6ff","#f6e3a8"];
+    for(let i=0;i<6;i++){const x=288+(i%3)*46,y=102+Math.floor(i/3)*38; o+=rect(x+1.5,y+2,38,30,`fill="#000" opacity=".25" filter="url(#b2)"`)+rect(x,y,38,30,`fill="${nc[i]}"`)+ln([x+5,y+10],[x+31,y+10],"#12263d",1.2,.5)+ln([x+5,y+17],[x+24,y+17],"#12263d",1.2,.5);}
+    o+=rect(617,95,120,78,`fill="#000" opacity=".5" filter="url(#b2)"`)+rect(614,92,120,78,`fill="#b98a56" stroke="#5e4426" stroke-width="3.5"`);
+    for(let i=0;i<60;i++) o+=`<circle cx="${f(618+rnd(i)*112)}" cy="${f(96+rnd(i+90)*70)}" r="1" fill="#6b4a26" opacity=".5"/>`;
+    [[622,100,30,24],[660,100,34,28],[700,102,26,22],[626,134,28,28],[664,136,36,24]].forEach(([x,y,w,h])=>{o+=rect(x+1.5,y+2,w,h,`fill="#000" opacity=".3" filter="url(#b2)"`)+rect(x,y,w,h,`fill="${PAPER}"`)+`<circle cx="${x+w/2}" cy="${y+2}" r="2" fill="#e5483a"/>`+ln([x+4,y+h*.5],[x+w-4,y+h*.5],"#6b8fb3",1.2);});
+    o+=sketchWall("L",[[.12,.26,.26,.62],[.34,.46,.3,.64],[.54,.66,.28,.62]])+sketchWall("R",[[.12,.26,.3,.64],[.34,.46,.26,.62],[.54,.66,.3,.62]]);
+    [-.62,.62].forEach(s=>{
+      o+=box(s,.38,160,40,"#6b4f33","#a07c52");
+      const [x,y]=fp(s,.38),k=K(.38),ty=y-40*k;
+      o+=ell(x,ty+1,62*k,8*k,`fill="#ffe2b0" opacity=".28" filter="url(#b5)"`);
+      [[-50,22,26],[-12,30,34],[30,18,22]].forEach(([dx,w,h],i)=>{o+=shadow(x+(dx+w/2)*k+4,ty,w*k*.7,3*k,.35)+rect(x+dx*k,ty-h*k,w*k,h*k,`fill="${i===1?"#f6e3a8":"#f3f5f7"}" stroke="#12263d" stroke-width=".7"`)+rect(x+dx*k+w*k*.55,ty-h*k,w*k*.45,h*k,`fill="#000" opacity=".12"`);});
+      o+=rect(x+60*k,ty-30*k,10*k,30*k,`fill="#9fd0f0"`)+rect(x+60*k,ty-30*k,10*k,30*k,`fill="url(#gGlass)"`);
+    });
+    const [px,py]=fp(.93,.14),pk=K(.14);
+    o+=shadow(px,py,16*pk,4*pk,.5)+rect(px-9*pk,py-20*pk,18*pk,20*pk,`fill="#e9eef3"`)+[[-12,-44],[0,-62],[12,-46],[-6,-34],[8,-34]].map(([dx,dy])=>ell(px+dx*pk,py+dy*pk,8*pk,20*pk,`fill="#3f9a6e"`)).join("");
+    return o;
+  }
+  /* floor 2 */
+  function shelf(sd){
+    let o=wq(sd,.12,.72,.28,.78,`fill="#2a2018"`)+wq(sd,.12,.72,.28,.3,`fill="#b58a4a"`)+wq(sd,.12,.72,.52,.54,`fill="#b58a4a"`);
+    for(let i=0;i<7;i++){const u=.15+i*.08; o+=wq(sd,u,u+.05,.33,.52,`fill="${PAPER}" stroke="#9db9d2" stroke-width=".8"`)+wq(sd,u+.03,u+.05,.33,.52,`fill="#000" opacity=".16"`)+wq(sd,u+.005,u+.045,.58,.77,`fill="${i%2?"#9fd0f0":PAPER}" stroke="#9db9d2" stroke-width=".8"`)+wq(sd,u+.03,u+.045,.58,.77,`fill="#000" opacity=".16"`);}
+    return o;
+  }
+  function art2(){
+    let o=rect(272,86,164,108,`fill="#8fc0ff" opacity=".12" filter="url(#b5)"`)+rect(608,86,134,108,`fill="#8fc0ff" opacity=".12" filter="url(#b5)"`);
+    o+=rect(281,96,150,92,`fill="#000" opacity=".5" filter="url(#b2)"`)+rect(278,92,150,92,`fill="#2a6aa8" stroke="#e9eef4" stroke-width="2.5"`);
+    for(let i=1;i<10;i++) o+=ln([278+i*15,92],[278+i*15,184],"#cfe3f5",.6,.35);
+    for(let j=1;j<6;j++) o+=ln([278,92+j*15.3],[428,92+j*15.3],"#cfe3f5",.6,.35);
+    o+=rect(300,108,106,62,`fill="none" stroke="#fff" stroke-width="3"`)+ln([350,108],[350,170],"#fff",3)+ln([350,140],[406,140],"#fff",3)+`<path d="M320 170A14 14 0 0 1 334 156" stroke="#fff" fill="none"/>`;
+    o+=rect(278,92,150,92,`fill="url(#gGlass)"`)+rect(617,96,120,92,`fill="#000" opacity=".5" filter="url(#b2)"`)+rect(614,92,120,92,`fill="#2a6aa8" stroke="#e9eef4" stroke-width="2.5"`);
+    o+=`<path d="M630 170V128L674 104L718 128V170Z" stroke="#fff" stroke-width="2.4" fill="none"/>`+rect(644,138,16,16,`fill="none" stroke="#fff" stroke-width="1.8"`)+rect(688,138,16,16,`fill="none" stroke="#fff" stroke-width="1.8"`)+rect(668,148,14,22,`fill="none" stroke="#fff" stroke-width="1.8"`);
+    o+=ln([622,176],[726,176],"#fff",1,.7)+txt(674,183,"1/4&Prime; = 1&prime;-0&Prime;",7,"#cfe3f5",'font-weight="500"')+rect(614,92,120,92,`fill="url(#gGlass)"`);
+    o+=shelf("L")+shelf("R");
+    [-.6,.6].forEach((s,j)=>{
+      const [x,y]=fp(s,.4),k=K(.4),w=118*k,th=54*k;
+      o+=shadow(x,y,w*.65,w*.1,.5)+ln([x-w*.4,y-th],[x-w*.44,y],"#aab6c4",3)+ln([x+w*.4,y-th],[x+w*.44,y],"#aab6c4",3);
+      const sx=x+(j?-1:1)*w*.7;
+      o+=shadow(sx,y,9*k,3*k,.45)+ln([sx,y],[sx,y-26*k],"#aab6c4",2.5)+ell(sx,y-28*k,11*k,4*k,`fill="#2a3138"`)+ell(sx,y-29*k,11*k,3.5*k,`fill="#59626b"`);
+      o+=poly([[x-w/2,y-th],[x+w/2,y-th],[x+w/2-9*k,y-th-26*k],[x-w/2+9*k,y-th-26*k]],`fill="#dbe5ef" stroke="#aab6c4" stroke-width="1"`)+poly([[x-w/2,y-th],[x+w/2,y-th],[x+w/2-9*k,y-th-26*k],[x-w/2+9*k,y-th-26*k]],`fill="url(#gShade)"`);
+      o+=ln([x-w*.3,y-th-8*k],[x+w*.2,y-th-8*k],"#2a6aa8",1.4)+ln([x-w*.2,y-th-16*k],[x+w*.3,y-th-16*k],"#2a6aa8",1.4);
+      const lx=x+(j?-1:1)*w*.38,ly=y-th-26*k,hx=lx+(j?-14:14)*k,hy=ly-26*k;
+      o+=ln([lx,ly],[hx,hy],"#aab6c4",2)+`<g class="flick">`+glow(hx+(j?-4:4)*k,hy+4*k,36*k,.7)+poly([[hx-9*k,hy],[hx+9*k,hy],[hx+14*k,hy+9*k],[hx-14*k,hy+9*k]],`fill="#fff0c0"`)+`</g>`;
+    });
+    return o;
+  }
+  /* floor 1 */
+  function art1(){
+    let o=rect(270,92,118,92,`fill="#ffd9a0" opacity=".12" filter="url(#b5)"`)+rect(662,92,80,92,`fill="#ffd9a0" opacity=".12" filter="url(#b5)"`);
+    o+=rect(279,103,106,76,`fill="#000" opacity=".5" filter="url(#b2)"`)+rect(276,100,106,76,`fill="#0a1019" stroke="#3a4655" stroke-width="2"`)+txt(329,115,"DIRECTORY",9,"#ffd9a0");
+    for(let i=0;i<5;i++) o+=ln([288,126+i*10],[318+((i*13)%40),126+i*10],"#9db9d2",2,.8)+ln([348,126+i*10],[368,126+i*10],"#ffc66e",2,.9);
+    o+=rect(276,100,106,76,`fill="url(#gGlass)"`)+rect(673,103,64,76,`fill="#000" opacity=".5" filter="url(#b2)"`)+rect(670,100,64,76,`fill="${PAPER}" stroke="#2b333c" stroke-width="2"`)+`<path d="M680 160V132L702 116L724 132V160Z" stroke="${INK}" stroke-width="2" fill="none"/>`+txt(702,170,"WELCOME",7,INK);
+    [["L",[[.12,.2],[.3,.38],[.5,.57]]],["R",[[.12,.2],[.3,.38],[.5,.57]]]].forEach(([sd,arr])=>arr.forEach(([u1,u2])=>{
+      o+=wq(sd,u1-.02,u2+.02,.04,.78,`fill="#ffd9a0" opacity=".14" filter="url(#b5)"`)+wq(sd,u1,u2,.08,.72,`fill="#e9b24a"`)+wq(sd,u1,u1+(u2-u1)*.45,.08,.72,`fill="#fff" opacity=".12"`)+wq(sd,u1+.012,u2-.012,.5,.66,`fill="#12263d" opacity=".25"`);
+      const [x,y]=wall(sd,(u1+u2)/2,.3); o+=`<circle cx="${f(x)}" cy="${f(y)}" r="${f(Math.abs(wall(sd,u2,.3)[0]-wall(sd,u1,.3)[0])*.22)}" fill="#12263d" opacity=".5"/>`;
+    }));
+    [-.3,.3].forEach(s=>{const [x,y]=cp(s,.5); o+=ln([x,y],[x,y+34],"#0a0d10",1.3)+glow(x,y+44,46,.8)+`<circle cx="${f(x)}" cy="${f(y+42)}" r="12" fill="#fff4d2"/>`+ell(x,y+80,40,8,`fill="#ffd9a0" opacity=".2" filter="url(#b5)"`);});
+    const [mx,my]=fp(0,.45),k=K(.45);
+    o+=ell(mx,my,150*k,17*k,`fill="none" stroke="${BR}" stroke-width="2" opacity=".85"`)+ell(mx,my,100*k,11*k,`fill="none" stroke="${BR}" stroke-width="1" opacity=".6"`);
+    o+=box(-.64,.42,150,46,"#e9edf0","#ffffff")+rect(190,261,120,3,`fill="#ffd28a" opacity=".9"`)+rect(186,258,128,10,`fill="#ffd28a" opacity=".3" filter="url(#b2)"`);
+    o+=rect(238,229,24,8,`fill="#0b1724" stroke="#9aa6b3" stroke-width="1"`)+`<circle cx="262" cy="233" r="2" fill="#ff6b5a"/>`;
+    const [px,py]=fp(.72,.4),pk=K(.4);
+    o+=shadow(px,py,18*pk,5*pk,.5)+rect(px-10*pk,py-18*pk,20*pk,18*pk,`fill="#e9eef3"`)+[[-12,-34],[0,-46],[12,-34],[-4,-28]].map(([dx,dy])=>ell(px+dx*pk,py+dy*pk,9*pk,15*pk,`fill="#3f9a6e"`)).join("");
+    return o;
+  }
+  const FLOORS=[
+    {name:"Skyline Gallery",c:{kind:"stone",lights:false,ceilA:"#0b1017",ceilB:"#1b2531",wallHi:"#7a8aa0",wallLo:"#3b4858",sideA:"#1c2530",sideB:"#4f6076",floorFar:"#46546a",floorNear:"#0a0e13"},art:art5,door:"stairs",hs:[{x:276,y:94,w:162,h:44,l:"Stone tablets"},{x:26,y:48,w:128,h:196,l:"Skyline window"},{x:668,y:146,w:44,h:44,l:"Brass disk"},{x:280,y:146,w:152,h:38,l:"Who’s who board"}]},
+    {name:"Hall of Visionaries",c:{kind:"wood",lights:true,ceilA:"#0d0b0c",ceilB:"#231e1d",wallHi:"#948a82",wallLo:"#4a423e",sideA:"#1b1716",sideB:"#5c524c",floorFar:"#4a3a2f",floorNear:"#0d0908"},art:art4,door:"stairs",hs:[{x:226,y:206,w:56,h:74,l:"Display case"},{x:28,y:62,w:98,h:172,l:"Mystery portraits"},{x:836,y:60,w:134,h:175,l:"Wall of fame"},{x:612,y:94,w:124,h:62,l:"Prize wall"}]},
+    {name:"Design Studio",c:{kind:"wood",lights:true,ceilA:"#0d1114",ceilB:"#262c30",wallHi:"#a7aaac",wallLo:"#55595c",sideA:"#23282a",sideB:"#6f7578",floorFar:"#a58257",floorNear:"#3b2b19"},art:art3,door:"stairs",hs:[{x:276,y:90,w:154,h:90,l:"Whiteboard"},{x:612,y:90,w:124,h:82,l:"Site photos"},{x:186,y:214,w:132,h:66,l:"Library model"},{x:835,y:62,w:140,h:170,l:"Pinned sketches"}]},
+    {name:"Drafting Room",c:{kind:"stone",lights:true,ceilA:"#10151b",ceilB:"#2b343d",wallHi:"#d6dce2",wallLo:"#818a94",sideA:"#2c333b",sideB:"#abb4bd",floorFar:"#727b86",floorNear:"#1a1f25"},art:art2,door:"stairs",hs:[{x:612,y:90,w:124,h:96,l:"Elevation poster"},{x:214,y:206,w:96,h:72,l:"Drafting table"},{x:276,y:90,w:154,h:96,l:"Floor plan poster"},{x:690,y:206,w:96,h:72,l:"Line sample table"}]},
+    {name:"Lobby",c:{kind:"marble",lights:true,ceilA:"#0d0e12",ceilB:"#262932",wallHi:"#b9ab96",wallLo:"#5d5244",sideA:"#251f1a",sideB:"#6f6456",floorFar:"#d6d0c5",floorNear:"#403c37"},art:art1,door:"glass",hs:[{x:274,y:98,w:110,h:80,l:"Directory"},{x:668,y:98,w:68,h:80,l:"Notice board"},{x:188,y:226,w:124,h:52,l:"Reception phone"},{x:26,y:38,w:124,h:172,l:"Career banner"}]}
+  ];
+  function hot(cls,i,r,label,badge,aria){
+    const lw=label.length*6.8+18, lx=Math.max(4,Math.min(996-lw,r.x+r.w/2-lw/2)), ly=r.y>30?r.y-22:r.y+r.h+6;
+    return `<g class="hot ${cls}" data-i="${i}" tabindex="0" role="button" aria-label="${aria}">
+      <rect class="hr" x="${f(r.x)}" y="${f(r.y)}" width="${f(r.w)}" height="${f(r.h)}" rx="3"/>
+      <g class="lab"><rect x="${f(lx)}" y="${f(ly)}" width="${f(lw)}" height="20" rx="2"/><text x="${f(lx+lw/2)}" y="${f(ly+10.5)}">${label}</text></g>
+      ${badge===null?"":`<g class="badge"><circle cx="${f(r.x+4)}" cy="${f(r.y+4)}" r="14"/><text x="${f(r.x+4)}" y="${f(r.y+4.5)}">${badge}</text></g>`}
+    </g>`;
+  }
+  function draw(idx,state,o2){
+    const F=FLOORS[idx]; o2=o2||{};
+    let vb="0 0 1000 320";
+    if(o2.crop){
+      const c=o2.crop, asp=1000/320; let W=Math.max(c.w+110,(c.h+70)*asp), H=W/asp;
+      if(W>1000){W=1000;H=320;}
+      const vx=Math.max(0,Math.min(1000-W,c.x+c.w/2-W/2)), vy=Math.max(0,Math.min(320-H,c.y+c.h/2-H/2));
+      vb=`${f(vx)} ${f(vy)} ${f(W)} ${f(H)}`;
+    }
+    let o=`<svg viewBox="${vb}" preserveAspectRatio="xMidYMid slice" role="img" aria-label="Rendering of the ${F.name}, a museum gallery. The exit door is ${state==="open"?"open":state==="ready"?"unlocked and ready":"locked"}.">`;
+    o+=shell(F.c);
+    o+=F.door==="glass"?glassDoors(state):stairDoor(state);
+    o+=F.art();
+    o+=`<rect width="1000" height="320" fill="url(#gGrade)" pointer-events="none"/><rect width="1000" height="320" fill="url(#gVig)" pointer-events="none"/>`;
+    if(o2.spots){
+      F.hs.forEach((r,i)=>{const d=o2.solved&&o2.solved[i]; o+=hot(d?"done":"todo",i,r,r.l,d?"&#10003;":i+1,`Open task ${i+1}: ${(o2.titles&&o2.titles[i])||r.l}${d?" (solved)":""}`);});
+      const k=F.door==="glass"?{x:612,y:132,w:40,h:52}:{x:570,y:132,w:40,h:52};
+      o+=hot("key"+(o2.ready?" done":""),"key",k,"Keypad",null,"Go to the keypad");
+    }
+    return o+`</svg>`;
+  }
+  return {draw,spots:i=>FLOORS[i].hs,names:FLOORS.map(f=>f.name)};
+})();
+function heroRender(){
+  let o=`<svg viewBox="0 0 320 340" role="img" aria-label="Twilight rendering of a five-story glass museum with the top floor glowing">
+  <defs>
+    <linearGradient id="hSky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0e1a33"/><stop offset=".6" stop-color="#3b5784"/><stop offset="1" stop-color="#f0a45f"/></linearGradient>
+    <linearGradient id="hGlass" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#27405f"/><stop offset="1" stop-color="#0f1c2e"/></linearGradient>
+    <linearGradient id="hLit" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff0c4"/><stop offset="1" stop-color="#f3ab52"/></linearGradient>
+    <linearGradient id="hRef" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffc66e" stop-opacity=".35"/><stop offset="1" stop-color="#ffc66e" stop-opacity="0"/></linearGradient>
+    <filter id="hb" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="6"/></filter>
+    <clipPath id="hClip"><rect width="320" height="340"/></clipPath>
+  </defs>
+  <g clip-path="url(#hClip)">
+  <rect width="320" height="340" fill="url(#hSky)"/>`;
+  for(let i=0;i<14;i++){const x=i*24-6,h=40+((i*37)%50); o+=`<rect x="${x}" y="${250-h}" width="20" height="${h}" fill="#0b1424" opacity=".85"/>`; for(let k=0;k<3;k++) if((i+k)%2) o+=`<rect x="${x+5}" y="${250-h+8+k*12}" width="3" height="4" fill="#ffcf82" opacity=".8"/>`;}
+  o+=`<rect y="248" width="320" height="92" fill="#0c1420"/><rect y="248" width="320" height="2" fill="#ffc66e" opacity=".35"/>
+  <rect x="40" y="40" width="240" height="14" fill="#0b1119"/><rect x="26" y="34" width="268" height="8" fill="#e8edf2"/>`;
+  for(let fl=0;fl<5;fl++){const y=54+fl*38, top=fl===0;
+    o+=`<rect x="48" y="${y}" width="224" height="36" fill="${top?"url(#hLit)":"url(#hGlass)"}"/>`;
+    if(top) o+=`<rect x="40" y="${y-4}" width="240" height="44" fill="#ffc66e" opacity=".5" filter="url(#hb)"/>`;
+    else for(let k=0;k<6;k++) if((fl*3+k)%3!==0) o+=`<rect x="${52+k*37}" y="${y+4}" width="30" height="28" fill="#f3ab52" opacity="${(0.25+((fl+k)%3)*.18).toFixed(2)}"/>`;
+    for(let k=0;k<=7;k++) o+=`<rect x="${48+k*32}" y="${y}" width="2" height="36" fill="#0b1119"/>`;
+    o+=`<rect x="44" y="${y+36}" width="232" height="3" fill="#cfd6de" opacity=".85"/>`;}
+  o+=`<rect x="48" y="244" width="224" height="6" fill="#0b1119"/>
+  <rect x="48" y="252" width="224" height="80" fill="url(#hRef)" opacity=".8"/>
+  <rect x="48" y="252" width="224" height="26" fill="url(#hLit)" opacity=".28" filter="url(#hb)"/>
+  <rect x="48" y="40" width="224" height="40" fill="#fff" opacity=".07"/>
+  <g font-family="Josefin Sans,sans-serif" font-weight="700">
+    <rect x="76" y="62" width="168" height="22" rx="2" fill="#0e1319" opacity=".9"/><text x="160" y="77.5" text-anchor="middle" font-size="12.5" fill="#ffc66e">You are here: Floor 5</text>
+  </g>
+  <text x="160" y="328" text-anchor="middle" font-family="IBM Plex Sans,sans-serif" font-size="12" fill="#c7cfd8">Street level: the exit</text>
+  </g></svg>`;
+  return o;
+}
+
+function sceneEl(idx,state,label,opts,onSpot){
+  const w=h("div",{class:"scene-wrap"+(opts&&opts.flush?" flush":"")},h("div",{html:SCN.draw(idx,state,opts)}),label?h("div",{class:"scene-tag"},label):null);
+  if(onSpot){
+    w.addEventListener("click",e=>{const g=e.target.closest(".hot"); if(g) onSpot(g.dataset.i);});
+    w.addEventListener("keydown",e=>{ if(e.key==="Enter"||e.key===" "){const g=e.target.closest&&e.target.closest(".hot"); if(g){e.preventDefault(); onSpot(g.dataset.i);}} });
+  }
+  return w;
+}
+
+const app = document.getElementById("app");
+const LS_KEY = "arch-escape-room-v1";
+
+function fresh(){ return {screen:"start", team:"", start:null, end:null, room:0, puzzle:null, solved:{}, hints:{}, letters:[]}; }
+function load(){ try{ const r = localStorage.getItem(LS_KEY); return r ? JSON.parse(r) : null; }catch(e){ return null; } }
+function save(){ try{ localStorage.setItem(LS_KEY, JSON.stringify(S)); }catch(e){} }
+let S = load() || fresh();
+
+/* URL helper for teachers: ?room=3 jumps straight to that room for testing */
+(function(){
+  const q = new URLSearchParams(location.search).get("room");
+  if(q && ROOMS[+q-1]){
+    S = fresh(); S.team = "Teacher preview"; S.start = Date.now(); S.screen = "room"; S.room = +q-1; S.letters = ROOMS.slice(0,+q-1).map(r=>r.letter);
+  }
+})();
+
+function h(tag, attrs, ...kids){
+  const e = document.createElement(tag);
+  for(const [k,v] of Object.entries(attrs||{})){
+    if(k==="class") e.className = v;
+    else if(k==="html") e.innerHTML = v;
+    else if(k.startsWith("on")) e.addEventListener(k.slice(2), v);
+    else if(v!==false && v!==null && v!==undefined) e.setAttribute(k, v===true?"":v);
+  }
+  kids.flat().forEach(c=>{ if(c==null||c===false) return; e.append(c.nodeType ? c : document.createTextNode(/&#?\w+;/.test(c) ? decode(String(c)) : c)); });
+  return e;
+}
+const decode = s => { const t=document.createElement("textarea"); t.innerHTML=s; return t.value; };
+const norm = s => decode(String(s)).toLowerCase().replace(/[^a-z0-9\s]/g," ").replace(/\s+/g," ").trim().replace(/^(the|a|an)\s+/,"");
+function numval(s){
+  s = String(s).toLowerCase().replace(/,/g,"").replace(/\b(feet|foot|ft|inches|inch|in|sq|square)\b/g," ").replace(/["'”’′″]/g," ").replace(/\s+/g," ").trim();
+  let m = s.match(/^(\d+)\s+(\d+)\/(\d+)$/); if(m) return +m[1] + (+m[2])/(+m[3]);
+  m = s.match(/^(\d+)\/(\d+)$/); if(m) return (+m[1])/(+m[2]);
+  return /^\d*\.?\d+$/.test(s) ? parseFloat(s) : NaN;
+}
+const fmt = ms => { const s=Math.floor(ms/1000); return String(Math.floor(s/60)).padStart(2,"0")+":"+String(s%60).padStart(2,"0"); };
+const elapsed = () => (S.end||Date.now()) - S.start;
+const hintTotal = () => Object.values(S.hints).reduce((a,b)=>a+b,0);
+
+/* puzzle input types: each returns {el, check()} */
+const TYPES = {
+  multi(p){
+    const inputs = p.fields.map(f=>h("input",{type:"text",autocomplete:"off",autocapitalize:"off",spellcheck:"false",placeholder:f.ph||"Your answer","aria-label":decode(f.label).replace(/\s+/g," ")}));
+    const rows = p.fields.map((f,k)=>h("label",{class:"frow"},h("span",{html:f.label}),inputs[k]));
+    return {el:h("div",{},rows), check(){
+      let n=0;
+      p.fields.forEach((f,k)=>{
+        const v = inputs[k].value;
+        const ok = f.num!==undefined ? Math.abs(numval(v)-f.num)<1e-9 : f.answers.some(a=>norm(a)===norm(v));
+        inputs[k].classList.toggle("ok",ok); inputs[k].classList.toggle("no",!ok && v.trim()!=="");
+        if(ok) n++;
+      });
+      return n===p.fields.length ? {ok:true,msg:"Every answer is correct."} : {ok:false,msg:`${n} of ${p.fields.length} answers correct. Fix the ones outlined in red.`};
+    }};
+  },
+  order(p){
+    const arr = p.start.slice();
+    const list = h("ol",{class:"orderlist"});
+    const draw = () => list.replaceChildren(...arr.map((idx,pos)=>h("li",{},
+      h("span",{class:"otext",html:p.items[idx]}),
+      h("span",{class:"obtns"},
+        h("button",{class:"mini",type:"button","aria-label":"Move up",disabled:pos===0,onclick:()=>{[arr[pos-1],arr[pos]]=[arr[pos],arr[pos-1]];draw();}},"▲"),
+        h("button",{class:"mini",type:"button","aria-label":"Move down",disabled:pos===arr.length-1,onclick:()=>{[arr[pos+1],arr[pos]]=[arr[pos],arr[pos+1]];draw();}},"▼")
+      ))));
+    draw();
+    return {el:list, check(){
+      const c = arr.filter((idx,pos)=>idx===pos).length;
+      return c===arr.length ? {ok:true,msg:"Perfect order."} : {ok:false,msg:`${c} of ${arr.length} are in the right place.`};
+    }};
+  },
+  match(p){
+    const opts = [...p.options].sort((a,b)=>norm(a).localeCompare(norm(b)));
+    const sels = p.pairs.map(()=>h("select",{},h("option",{value:""},"Choose…"),opts.map(o=>h("option",{value:decode(o),html:o}))));
+    const rows = p.pairs.map((pr,k)=>h("label",{class:"mrow"},h("span",{html:pr[0]}),sels[k]));
+    return {el:h("div",{},rows), check(){
+      const c = p.pairs.filter((pr,k)=>sels[k].value===decode(pr[1])).length;
+      return c===p.pairs.length ? {ok:true,msg:"All matches are correct."} : {ok:false,msg:`${c} of ${p.pairs.length} matches are correct.`};
+    }};
+  },
+  pick(p){
+    const boxes = p.options.map(()=>h("input",{type:"checkbox"}));
+    const rows = p.options.map((o,k)=>h("label",{class:"pickrow"},boxes[k],h("span",{html:o})));
+    return {el:h("div",{},rows), check(){
+      const sel = boxes.map((b,k)=>b.checked?k:-1).filter(k=>k>=0);
+      const ok = sel.length===p.correct.length && p.correct.every(k=>sel.includes(k));
+      return ok ? {ok:true,msg:"Both impostors found."} : {ok:false,msg: sel.length!==p.correct.length ? `Select exactly ${p.correct.length} names.` : "Not quite. Check each person's job."};
+    }};
+  }
+};
+
+function solvedCard(p, num){
+  return h("article",{class:"puzzle solved"},
+    h("div",{class:"ph"}, h("h3",{},p.title), h("span",{class:"digit"},`Digit #${num}: ${p.digit}`)),
+    h("div",{class:"reveal",html:p.reveal}));
+}
+
+function activeCard(p, num, total, onSolved){
+  const card = h("article",{class:"puzzle"});
+  const ui = TYPES[p.type](p);
+  const status = h("div",{class:"msg",role:"status","aria-live":"polite"});
+  const hintBox = h("div",{class:"hints"});
+  const hintBtn = h("button",{class:"btn ghost",type:"button"});
+  const drawHints = () => {
+    const n = S.hints[p.id]||0;
+    hintBox.replaceChildren(...p.hints.slice(0,n).map((t,k)=>h("p",{class:"hint"},h("b",{},`Hint ${k+1}: `),h("span",{html:t}))));
+    hintBtn.textContent = n>=p.hints.length ? "No more hints" : `Need a hint? (${n}/${p.hints.length} used)`;
+    hintBtn.disabled = n>=p.hints.length;
+  };
+  hintBtn.addEventListener("click",()=>{
+    const n = S.hints[p.id]||0;
+    if(n<p.hints.length){ S.hints[p.id]=n+1; save(); drawHints(); const c=document.getElementById("hintcount"); if(c) c.textContent=hintTotal(); }
+  });
+  const checkBtn = h("button",{class:"btn",type:"button",onclick:()=>{
+    const r = ui.check();
+    status.className = "msg "+(r.ok?"good":"bad"); status.textContent = r.msg;
+    if(r.ok){ S.solved[p.id]=true; save(); setTimeout(()=>onSolved(card),450); }
+  }},"Check answer");
+  card.append(
+    h("div",{class:"ph"}, h("h3",{},p.title), total?h("span",{class:"pn"},`Puzzle ${num} of ${total}`):null),
+    h("div",{class:"prompt",html:p.prompt}),
+    ui.el,
+    h("div",{class:"actions"},checkBtn,hintBtn),
+    status, hintBox
+  );
+  drawHints();
+  return card;
+}
+
+/* ---------- shared chrome ---------- */
+function topbar(){
+  const late = S.start && elapsed() >= TARGET_MIN*60000 && !S.end;
+  return h("div",{},
+    h("header",{class:"top"},h("div",{class:"wrap"},
+      h("div",{class:"brand"},MUSEUM),
+      h("div",{class:"stats"},
+        S.team?h("span",{},"Team: ",h("b",{},S.team)):null,
+        h("span",{},"Hints: ",h("b",{id:"hintcount"},hintTotal())),
+        S.start?h("span",{id:"timer",class:late?"late":"","aria-label":"Elapsed time"},fmt(elapsed())):null,
+        h("button",{class:"btn ghost",type:"button",onclick:()=>{ if(confirm("Restart the game from the beginning? Your progress will be lost.")){ S=fresh(); save(); render(); } }},"Restart")
+      ))),
+    h("div",{id:"late",class:"late-banner",hidden:!late},"The night guard is on his way! You can still escape. Keep going."));
+}
+function keycards(){
+  const out=[];
+  for(let i=0;i<5;i++) out.push(S.letters[i] ? h("div",{class:"kc"},S.letters[i]) : h("div",{class:"kc empty"},"?"));
+  return out;
+}
+function footer(){
+  return h("footer",{class:"foot"},h("div",{class:"wrap"},h("span",{class:"lbl"},"Keycard fragments:"),...keycards()));
+}
+function floorNav(){
+  const all = S.screen==="exit"||S.screen==="win";
+  return h("nav",{class:"section-nav","aria-label":"Museum floors"},
+    h("div",{class:"roof"}),
+    ...ROOMS.map((r,i)=>{
+      const done = all || i<S.room || (i===S.room && S.screen==="transition");
+      const now = !all && i===S.room && S.screen==="room";
+      return h("div",{class:"fl"+(done?" done":"")+(now?" now":""),"aria-current":now?"true":null},
+        h("span",{class:"n"},r.floor), h("span",{class:"t"},r.short));
+    }));
+}
+
+/* ---------- screens ---------- */
+function startScreen(){
+  const input = h("input",{type:"text",placeholder:"Team name",maxlength:"30","aria-label":"Team name",autocomplete:"off"});
+  const go = () => {
+    S = fresh(); S.team = input.value.trim() || "Unnamed team"; S.start = Date.now(); S.screen="room"; save(); render();
+  };
+  input.addEventListener("keydown",e=>{ if(e.key==="Enter") go(); });
+  const skyline = heroRender();
+  return h("div",{},
+    topbar(),
+    h("div",{class:"wrap"},h("div",{class:"hero"},
+      h("div",{},
+        h("h1",{},"Escape the Skyline Museum of Architecture"),
+        h("p",{class:"lead"},"Your class stayed late for the museum&rsquo;s night tour, and now the doors are sealed. The only way out is down five floors, and every floor is locked behind a keypad. Solve the puzzles, learn what architects really do, and make it to the street before the night guard returns."),
+        h("ul",{class:"rules"},
+          h("li",{},"Play in teams of 3 to 5. Split up the puzzles on each floor, then share what you learn."),
+          h("li",{},"Each floor has a gallery guide with the facts you need. Four of the exhibits hide a task: click a glowing exhibit to open it on its own page."),
+          h("li",{},"Every solved puzzle reveals one digit. Follow the plaque&rsquo;s rule to turn the four digits into the keypad code."),
+          h("li",{},"Hints are free, but your team&rsquo;s hint count shows up in your final rank."),
+          h("li",{},`The target time is ${TARGET_MIN} minutes. No browser search needed, because everything is in the guides.`)),
+        h("div",{class:"teamrow"},input,h("button",{class:"btn",type:"button",onclick:go},"Begin the escape"))
+      ),
+      h("div",{html:skyline})
+    ))
+  );
+}
+
+function titleBlock(R,view,note){
+  const cell=(k,v)=>h("div",{},h("small",{},k),h("span",{},v));
+  return h("div",{class:"titleblock"},
+    cell("Project","Skyline Museum of Architecture"),
+    cell("Level",`Floor ${R.floor} of 5`),
+    cell("View",view),
+    cell("Scale","Not to scale"),
+    cell("Progress",note));
+}
+function openPuzzle(i){ const R=ROOMS[S.room]; location.hash="#/floor"+R.floor+"/"+R.puzzles[i].id; }
+function closePuzzle(){ const R=ROOMS[S.room]; location.hash="#/floor"+R.floor; }
+function syncFromHash(){
+  if(S.screen!=="room") return null;
+  const m=location.hash.match(/^#\/floor(\d)\/(\w+)$/);
+  if(m){ const R=ROOMS[S.room]; if(+m[1]===R.floor){ const i=R.puzzles.findIndex(p=>p.id===m[2]); if(i>=0) return i; } }
+  return null;
+}
+window.addEventListener("hashchange",()=>{
+  if(S.screen!=="room") return;
+  const np=syncFromHash(); if(np!==S.puzzle){ S.puzzle=np; render(); window.scrollTo(0,0); }
+});
+
+function roomScreen(){
+  const R = ROOMS[S.room], total = R.puzzles.length;
+  const solvedCount = R.puzzles.filter(p=>S.solved[p.id]).length, done = solvedCount===total;
+  const scene = sceneEl(S.room, done?"ready":"locked", `Floor ${R.floor}: ${R.name}`,
+    {spots:true, flush:true, solved:R.puzzles.map(p=>!!S.solved[p.id]), titles:R.puzzles.map(p=>p.title), ready:done},
+    k=>{ if(k==="key"){ const l=document.getElementById("lockholder"); l.scrollIntoView({behavior:"smooth",block:"center"}); const inp=l.querySelector("input"); if(inp) inp.focus({preventScroll:true}); } else openPuzzle(+k); });
+
+  const tasks = h("section",{class:"panel"},
+    h("h3",{},"Tasks on this floor"),
+    h("p",{},`${solvedCount} of ${total} solved. Click a glowing exhibit in the gallery, or pick a task here.`),
+    h("ul",{class:"tasklist"}, R.puzzles.map((p,i)=>{
+      const d=!!S.solved[p.id];
+      return h("li",{},h("button",{class:"taskbtn"+(d?" done":""),type:"button",onclick:()=>openPuzzle(i)},
+        h("span",{class:"tn"},d?"✓":String(i+1)), h("span",{},p.title), h("span",{class:"ts"},d?`Solved: digit ${p.digit}`:"Open task")));
+    })));
+
+  const lockHolder = h("div",{id:"lockholder"});
+  const digitsRow = h("div",{class:"digits"}, R.puzzles.map((p,i)=>h("div",{class:"dg"+(S.solved[p.id]?" on":"")},h("small",{},`#${i+1}`),h("b",{},S.solved[p.id]?p.digit:"?"))));
+  const msg = h("div",{class:"msg",role:"status","aria-live":"polite"});
+  const box = h("section",{class:"lock"},
+    h("h3",{},"Stairwell keypad"),
+    h("p",{html:`<b>Plaque:</b> ${R.rule.text}`}),
+    digitsRow,
+    done ? null : h("p",{},`Solve all ${total} tasks to reveal every digit. ${solvedCount} of ${total} solved.`));
+  if(done){
+    const input = h("input",{type:"text",inputmode:"numeric",maxlength:"4",autocomplete:"off","aria-label":"Four-digit code"});
+    const code = R.rule.fn(R.puzzles.map(p=>p.digit)).join("");
+    const tryIt = () => {
+      if(input.value.trim()===code){
+        S.letters.push(R.letter); S.screen = S.room===ROOMS.length-1 ? "exit" : "transition"; save(); render(); window.scrollTo(0,0);
+      } else {
+        msg.className="msg bad"; msg.textContent="The keypad buzzes. Re-read the plaque rule and check the order of your digits.";
+        box.classList.remove("shake"); void box.offsetWidth; box.classList.add("shake");
+      }
+    };
+    input.addEventListener("keydown",e=>{ if(e.key==="Enter") tryIt(); });
+    box.append(h("div",{class:"codein"},input,h("button",{class:"btn",type:"button",onclick:tryIt},"Enter code")),msg);
+  }
+  lockHolder.append(box);
+
+  const main = h("main",{},
+    scene,
+    titleBlock(R,`Interior perspective: ${R.name}`,`${solvedCount} of ${total} tasks`),
+    h("p",{class:"scenehint",html:"Click the <b>numbered glowing exhibits</b> to open each task. Hover over one to see what it is."}),
+    h("section",{class:"panel"},
+      h("div",{class:"floor-tag"},`Floor ${R.floor} of 5`),
+      h("h2",{},R.name),
+      h("p",{class:"story",html:R.story})),
+    guide(R,true), tasks, lockHolder);
+  return h("div",{},topbar(),h("div",{class:"layout wrap"},floorNav(),main),footer());
+}
+
+function puzzleScreen(){
+  const R = ROOMS[S.room], i = S.puzzle, p = R.puzzles[i], sp = SCN.spots(S.room)[i];
+  const closeUp = h("div",{class:"scene-wrap flush"},h("div",{html:SCN.draw(S.room,"locked",{crop:sp})}),h("div",{class:"scene-tag"},sp.l));
+  const after = h("div",{class:"after"});
+  const drawAfter = () => {
+    after.replaceChildren();
+    if(!S.solved[p.id]) return;
+    const nx = R.puzzles.findIndex((q,k)=>k!==i && !S.solved[q.id]);
+    after.append(h("div",{class:"actions"},
+      nx>=0 ? h("button",{class:"btn",type:"button",onclick:()=>openPuzzle(nx)},`Next exhibit: ${R.puzzles[nx].title}`) : null,
+      h("button",{class:nx>=0?"btn ghost":"btn",type:"button",onclick:closePuzzle},nx>=0?"Back to the gallery":"Back to the gallery and the keypad")));
+  };
+  const host = h("div",{});
+  host.append(S.solved[p.id] ? solvedCard(p,i+1) : activeCard(p,i+1,R.puzzles.length,card=>{ card.replaceWith(solvedCard(p,i+1)); drawAfter(); }));
+  drawAfter();
+  return h("div",{},topbar(),
+    h("div",{class:"page"},
+      h("div",{class:"crumbs"},h("button",{class:"btn ghost",type:"button",onclick:closePuzzle},"Back to the gallery")),
+      h("p",{class:"floor-tag"},`Floor ${R.floor}: ${R.name}`),
+      closeUp, titleBlock(R,`Detail view: ${sp.l}`,`Task ${i+1} of ${R.puzzles.length}`), host, after,
+      h("div",{style:"margin-top:22px"},guide(R,false))),
+    footer());
+}
+
+function guide(R,open){
+  return h("details",{class:"guide",open:open},
+    h("summary",{},"Gallery guide: facts for this floor"),
+    h("div",{class:"placards"},R.guide.map(g=>h("div",{class:"placard"},h("h4",{html:g.t}),h("p",{html:g.p})))));
+}
+
+function transitionScreen(){
+  const R = ROOMS[S.room], nxt = ROOMS[S.room+1];
+  return h("div",{},topbar(),
+    h("div",{class:"layout wrap"},floorNav(),
+      h("main",{},sceneEl(S.room,"open",`Floor ${R.floor}: ${R.name}`),h("section",{class:"panel"},
+        h("h2",{},"The door opens"),
+        h("p",{class:"story",html:R.outro}),
+        h("div",{class:"keycards"},...keycards()),
+        h("p",{},`Next stop: Floor ${nxt.floor}, ${nxt.name}.`),
+        h("button",{class:"btn",type:"button",onclick:()=>{S.room++; S.screen="room"; S.puzzle=null; save(); render(); window.scrollTo(0,0);}},`Go down to Floor ${nxt.floor}`)
+      ))),
+    footer());
+}
+
+function exitScreen(){
+  const R = ROOMS[ROOMS.length-1];
+  const card = activeCard(FINAL,1,0,()=>{ S.screen="win"; S.end=Date.now(); save(); render(); window.scrollTo(0,0); });
+  return h("div",{},topbar(),
+    h("div",{class:"layout wrap"},floorNav(),
+      h("main",{},
+        sceneEl(4,"ready","Floor 1: The Lobby"),
+        h("section",{class:"panel"},h("h2",{},"The front doors"),h("p",{class:"story",html:R.outro}),h("div",{class:"keycards"},...keycards())),
+        card)),
+    footer());
+}
+
+function winScreen(){
+  const mins = Math.floor(elapsed()/60000), hints = hintTotal();
+  let rank = "Intern architect";
+  if(mins<=TARGET_MIN && hints<=6) rank = "Principal architect";
+  else if(mins<=TARGET_MIN+15 && hints<=12) rank = "Project architect";
+  return h("div",{},topbar(),
+    h("div",{class:"wrap"},h("div",{class:"center"},
+      sceneEl(4,"open","The street"),
+      h("h1",{style:"margin-top:22px"},"You escaped!"),
+      h("p",{class:"story"},"The front doors swing open and cool night air rushes in. You made it down five floors by thinking like architects."),
+      h("div",{class:"cert"},
+        h("h2",{},"Certificate of escape"),
+        h("p",{},"This certifies that the team"),
+        h("div",{class:"big"},S.team),
+        h("p",{},`escaped the ${MUSEUM} in`),
+        h("div",{class:"big"},fmt(elapsed())),
+        h("p",{},`using ${hints} hint${hints===1?"":"s"}, earning the rank of`),
+        h("div",{class:"big"},rank)),
+      h("button",{class:"btn",type:"button",onclick:()=>window.print()},"Print certificate"),
+      h("div",{class:"panel",style:"margin-top:26px"},
+        h("h3",{},"What you just practiced"),
+        h("ul",{class:"rules"},
+          ...ROOMS.map((r,i)=>h("li",{},h("b",{},`Floor ${r.floor}: `),FACULTY[i][1])))),
+      h("div",{class:"panel"},
+        h("h3",{},"Could this be your career?"),
+        h("p",{},"Architects mix creativity, math, drawing, teamwork, and communication. If you enjoyed the puzzles, you already used many of the skills they use every day."),
+        h("p",{html:`The path usually includes an accredited degree, supervised work experience, and a licensing exam. To learn more, explore <a href="https://www.aia.org" target="_blank" rel="noopener">the American Institute of Architects</a> and <a href="https://www.ncarb.org" target="_blank" rel="noopener">NCARB</a>.`})),
+      h("div",{class:"panel"},
+        h("h3",{},"Talk it over with your team"),
+        h("ul",{class:"rules"},
+          h("li",{},"Which puzzle felt most like real design work? Why?"),
+          h("li",{},"Which architect or building would you like to learn more about?"),
+          h("li",{},"What building in your own town would you redesign, and what problem would you solve?"))),
+      h("button",{class:"btn ghost",type:"button",onclick:()=>{S=fresh();save();render();}},"Play again")
+    )));
+}
+
+function render(){
+  let el;
+  if(S.screen!=="room"){ S.puzzle=null; if(location.hash){ try{history.replaceState(null,"",location.pathname+location.search);}catch(e){} } }
+  switch(S.screen){
+    case "room": el = (S.puzzle!==null && S.puzzle!==undefined) ? puzzleScreen() : roomScreen(); break;
+    case "transition": el = transitionScreen(); break;
+    case "exit": el = exitScreen(); break;
+    case "win": el = winScreen(); break;
+    default: el = startScreen();
+  }
+  app.replaceChildren(el);
+}
+
+S.puzzle = syncFromHash();
+setInterval(()=>{
+  const t = document.getElementById("timer");
+  if(t && S.start && !S.end){
+    const e = elapsed(); t.textContent = fmt(e);
+    const late = e >= TARGET_MIN*60000;
+    t.classList.toggle("late",late);
+    const b = document.getElementById("late"); if(b) b.hidden = !late;
+  }
+},1000);
+
+render();
+</script>
+</body>
+</html>
